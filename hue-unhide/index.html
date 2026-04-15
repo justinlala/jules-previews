@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UnHide · Complete your comfort zone.</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/thin/style.css">
+
+<style>
+  /* mockup polish — dead links don't fake broken flows */
+  .lp-nav a,
+  .lp-header .btn,
+  .lp-footer a,
+  .btn-primary,
+  .btn-ghost,
+  .btn-secondary,
+  .ghost-link {
+    pointer-events: none;
+    cursor: default;
+  }
+  [data-theme-btn] {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+
+  :root {
+    /* warm neutrals */
+    --n-50:  #FDFBF7;
+    --n-100: #FAF7F0;
+    --n-200: #F4F0E8;
+    --n-300: #E8E2D6;
+    --n-400: #C4BBA8;
+    --n-500: #9A9283;
+    --n-600: #7A7265;
+    --n-700: #5A5347;
+    --n-800: #3A352C;
+    --n-900: #1E1E1E;
+    --n-950: #141210;
+
+    /* brand gold */
+    --b-50:  #FBF6EC;
+    --b-100: #F5EBD4;
+    --b-200: #EBDAB5;
+    --b-300: #D4BC8A;
+    --b-400: #C5A76E;
+    --b-500: #B59C63;
+    --b-600: #9D8652;
+    --b-700: #816D42;
+    --b-800: #665C34;
+    --b-900: #4A4226;
+    --b-950: #2E2918;
+
+    /* spacing */
+    --sp-2xs: 2px;
+    --sp-xs:  4px;
+    --sp-sm:  8px;
+    --sp-md:  16px;
+    --sp-lg:  24px;
+    --sp-xl:  32px;
+    --sp-2xl: 48px;
+    --sp-3xl: 64px;
+    --sp-4xl: 96px;
+    --sp-5xl: 128px;
+
+    /* radii */
+    --r-el: 4px;
+    --r-ctrl: 5px;
+    --r-comp: 8px;
+    --r-pill: 999px;
+
+    /* type */
+    --font-display: 'Playfair Display', 'Georgia', serif;
+    --font-sans: 'DM Sans', -apple-system, system-ui, sans-serif;
+    --tracking-label: 0.12em;
+  }
+
+  [data-theme="light"] {
+    --bg:         var(--n-100);
+    --surface1:   var(--n-50);
+    --surface2:   var(--n-200);
+    --surface3:   var(--n-300);
+    --border:     rgba(30, 30, 30, 0.10);
+    --border-vis: rgba(30, 30, 30, 0.18);
+    --text1:      var(--n-900);
+    --text2:      var(--n-700);
+    --text3:      var(--n-500);
+    --text4:      var(--n-400);
+    --accent:     var(--b-500);
+    --accent-dk:  var(--b-800);
+    --accent-sub: var(--b-50);
+    --shadow-sm:  0 1px 3px rgba(30, 30, 30, 0.06);
+    --shadow-md:  0 4px 12px rgba(30, 30, 30, 0.08);
+    --shadow-lg:  0 8px 32px rgba(30, 30, 30, 0.10);
+  }
+  [data-theme="dark"] {
+    --bg:         var(--n-950);
+    --surface1:   var(--n-900);
+    --surface2:   var(--n-800);
+    --surface3:   var(--n-700);
+    --border:     rgba(181, 156, 99, 0.15);
+    --border-vis: rgba(181, 156, 99, 0.25);
+    --text1:      var(--n-100);
+    --text2:      var(--n-400);
+    --text3:      var(--n-500);
+    --text4:      var(--n-600);
+    --accent:     var(--b-400);
+    --accent-dk:  var(--b-700);
+    --accent-sub: var(--b-950);
+    --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.20);
+    --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.25);
+    --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text1);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.7;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background 400ms ease, color 400ms ease;
+  }
+  a { color: inherit; text-decoration: none; }
+  p { margin: 0; }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 var(--sp-2xl);
+    width: 100%;
+  }
+  .container-narrow {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 var(--sp-2xl);
+    width: 100%;
+  }
+
+  .label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    color: var(--text3);
+  }
+
+  /* ── HEADER ── */
+  .lp-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    transition: background 400ms ease;
+  }
+  .lp-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+  }
+  .lp-brand {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text1);
+  }
+  .lp-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-xl);
+  }
+  .lp-nav a {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text2);
+    transition: color 200ms ease;
+  }
+  .lp-nav a:hover { color: var(--accent); }
+  .lp-nav-right {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-lg);
+  }
+  .lp-nav-right i {
+    font-size: 20px;
+    color: var(--text2);
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-sm);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    border-radius: var(--r-ctrl);
+    cursor: pointer;
+    transition: all 300ms ease;
+    text-decoration: none;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 16px 48px;
+    border-color: var(--accent);
+  }
+  .btn-primary:hover {
+    background: var(--accent-dk);
+    border-color: var(--accent-dk);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text1);
+    padding: 16px 40px;
+    border-color: var(--border-vis);
+  }
+  .btn-secondary:hover {
+    border-color: var(--text1);
+  }
+  .btn-small {
+    padding: 10px 24px;
+    font-size: 13px;
+  }
+  .ghost-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    border-bottom: 1px solid var(--border-vis);
+    padding-bottom: 2px;
+    transition: color 200ms ease, border-color 200ms ease;
+  }
+  .ghost-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* ── HERO ── */
+  .lp-hero {
+    position: relative;
+    padding: var(--sp-5xl) 0 var(--sp-4xl);
+    text-align: center;
+    overflow: hidden;
+  }
+  .lp-hero .container {
+    position: relative;
+    z-index: 2;
+  }
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-xl);
+  }
+  .hero-eyebrow .rule {
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .lp-hero h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(40px, 6.5vw, 80px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 auto var(--sp-lg);
+    max-width: 14ch;
+    color: var(--text1);
+  }
+  .lp-hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .lp-hero .sub {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text2);
+    max-width: 48ch;
+    margin: 0 auto var(--sp-2xl);
+    font-weight: 300;
+  }
+  .hero-ctas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-lg);
+    margin-bottom: var(--sp-4xl);
+  }
+
+  /* hero lifestyle visual placeholder */
+  .hero-visual {
+    max-width: 960px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 7;
+    background:
+      radial-gradient(ellipse 70% 80% at 50% 60%, rgba(181, 156, 99, 0.12), transparent 70%),
+      linear-gradient(180deg, var(--surface2) 0%, var(--surface1) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--r-comp);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .hero-visual-inner {
+    text-align: center;
+    padding: var(--sp-2xl);
+  }
+  .hero-visual-inner .display-word {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(48px, 5vw, 72px);
+    font-weight: 400;
+    color: var(--accent);
+    opacity: 0.35;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .hero-visual-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    color: var(--text3);
+    margin-top: var(--sp-md);
+  }
+
+  /* ── FEATURES ── */
+  .lp-feature {
+    padding: var(--sp-4xl) 0;
+  }
+  .lp-feature .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-3xl);
+    align-items: center;
+  }
+  .lp-feature.reverse .feature-text { order: 2; }
+  .lp-feature.reverse .feature-visual { order: 1; }
+
+  .feature-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+    margin-bottom: var(--sp-md);
+  }
+  .feature-eyebrow .label {
+    color: var(--accent);
+  }
+  .feature-heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(28px, 3.5vw, 42px);
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    margin: 0 0 var(--sp-lg);
+    color: var(--text1);
+  }
+  .feature-heading em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .feature-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text2);
+    max-width: 44ch;
+    margin: 0 0 var(--sp-xl);
+    font-weight: 300;
+  }
+  .feature-points {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--sp-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-sm);
+  }
+  .feature-points li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-sm);
+    font-size: 14px;
+    color: var(--text2);
+    font-weight: 300;
+  }
+  .feature-points li::before {
+    content: "";
+    flex: 0 0 6px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    transform: translateY(2px);
+  }
+
+  /* feature visual placeholders */
+  .feature-visual {
+    aspect-ratio: 4 / 3;
+    background:
+      radial-gradient(ellipse 60% 70% at 50% 50%, rgba(181, 156, 99, 0.08), transparent 65%),
+      var(--surface1);
+    border: 1px solid var(--border);
+    border-radius: var(--r-comp);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-md);
+    padding: var(--sp-2xl);
+    overflow: hidden;
+  }
+  .feature-visual i {
+    font-size: 48px;
+    color: var(--accent);
+    opacity: 0.6;
+  }
+  .feature-visual .vis-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    color: var(--text4);
+  }
+
+  /* product mini-cards inside feature visuals */
+  .mini-cards {
+    display: flex;
+    gap: var(--sp-md);
+    width: 100%;
+    max-width: 360px;
+  }
+  .mini-card {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-ctrl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .mini-card-img {
+    aspect-ratio: 1;
+    background:
+      linear-gradient(135deg, var(--surface2) 0%, var(--surface3) 100%);
+  }
+  .mini-card-body {
+    padding: var(--sp-sm) var(--sp-md);
+  }
+  .mini-card-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text1);
+    margin-bottom: 2px;
+  }
+  .mini-card-price {
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  /* ── DIVIDERS ── */
+  .lp-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  /* ── PULL QUOTE ── */
+  .lp-quote {
+    padding: var(--sp-4xl) 0;
+    text-align: center;
+  }
+  .lp-quote blockquote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(24px, 3.5vw, 40px);
+    line-height: 1.3;
+    color: var(--text1);
+    max-width: 20ch;
+    margin: 0 auto var(--sp-lg);
+    padding: 0;
+    border: none;
+  }
+  .lp-quote .attribution {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text3);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── STATS ROW ── */
+  .lp-stats {
+    padding: var(--sp-3xl) 0;
+    background: var(--surface1);
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-xl);
+    text-align: center;
+  }
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 500;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: var(--sp-xs);
+  }
+  .stat-label {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+  }
+
+  /* ── FINAL CTA ── */
+  .lp-cta-block {
+    padding: var(--sp-5xl) 0;
+    text-align: center;
+  }
+  .lp-cta-block h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin: 0 0 var(--sp-lg);
+    color: var(--text1);
+    max-width: 16ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .lp-cta-block h2 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .lp-cta-block .sub {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text2);
+    max-width: 44ch;
+    margin: 0 auto var(--sp-2xl);
+    font-weight: 300;
+  }
+  .lp-cta-block .note {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: var(--sp-md);
+  }
+
+  /* ── FOOTER ── */
+  .lp-footer {
+    border-top: 1px solid var(--border);
+    padding: var(--sp-3xl) 0 var(--sp-2xl);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: var(--sp-2xl);
+    margin-bottom: var(--sp-3xl);
+  }
+  .footer-brand {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text1);
+    margin-bottom: var(--sp-md);
+  }
+  .footer-tagline {
+    font-size: 13px;
+    color: var(--text3);
+    line-height: 1.6;
+    max-width: 28ch;
+  }
+  .footer-col-title {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    color: var(--text3);
+    margin-bottom: var(--sp-md);
+  }
+  .footer-col a {
+    display: block;
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: var(--sp-sm);
+    transition: color 200ms ease;
+  }
+  .footer-col a:hover { color: var(--accent); }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--sp-lg);
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text4);
+  }
+  .footer-socials {
+    display: flex;
+    gap: var(--sp-md);
+  }
+  .footer-socials i {
+    font-size: 18px;
+    color: var(--text3);
+    transition: color 200ms ease;
+  }
+  .footer-socials i:hover { color: var(--accent); }
+
+  /* ── FLOATING MODE BAR ── */
+  .floating-bar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: var(--surface2);
+    border: 1px solid var(--border-vis);
+    border-radius: var(--r-pill);
+    box-shadow: var(--shadow-lg);
+  }
+  .mode-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: var(--r-pill);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text3);
+    background: transparent;
+    cursor: pointer;
+    transition: all 200ms ease;
+  }
+  .mode-btn.active {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .lp-feature .container {
+      grid-template-columns: 1fr;
+      gap: var(--sp-xl);
+    }
+    .lp-feature.reverse .feature-text { order: 1; }
+    .lp-feature.reverse .feature-visual { order: 2; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: var(--sp-xl); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .hero-ctas { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ────────────────────────────────── -->
+<header class="lp-header">
+  <div class="container">
+    <a class="lp-brand" href="#">UnHide</a>
+    <nav class="lp-nav">
+      <a href="#">Blankets</a>
+      <a href="#">Robes</a>
+      <a href="#">Accessories</a>
+      <a href="#">Our Story</a>
+    </nav>
+    <div class="lp-nav-right">
+      <i class="ph-thin ph-magnifying-glass"></i>
+      <i class="ph-thin ph-user"></i>
+      <i class="ph-thin ph-tote"></i>
+    </div>
+  </div>
+</header>
+
+<!-- ── HERO ──────────────────────────────────── -->
+<section class="lp-hero">
+  <div class="container">
+    <div class="hero-eyebrow">
+      <span class="rule"></span>
+      <span class="label" style="color: var(--accent);">The coziest essentials</span>
+      <span class="rule"></span>
+    </div>
+    <h1>Your New <em>Comfort</em> Zone</h1>
+    <p class="sub">Faux-fur blankets, plush robes, and the kind of softness that turns any corner of your home into a retreat. Made to be lived in.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#">Shop Blankets</a>
+      <a class="ghost-link" href="#">Explore the collection</a>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-visual-inner">
+        <div class="display-word">Softness</div>
+        <div class="hero-visual-label">Lifestyle photography placeholder</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="lp-divider container">
+
+<!-- ── FEATURE 1 ─────────────────────────────── -->
+<section class="lp-feature">
+  <div class="container">
+    <div class="feature-text">
+      <div class="feature-eyebrow">
+        <span class="label">Faux Fur</span>
+      </div>
+      <h3 class="feature-heading">Softness You Can <em>Feel</em> Before You Touch It</h3>
+      <p class="feature-body">Every UnHide blanket is crafted from premium faux fur that looks and feels like the real thing — without any of the guilt. The kind of softness that makes you cancel plans.</p>
+      <ul class="feature-points">
+        <li>100% vegan materials, always</li>
+        <li>Machine washable — stays soft wash after wash</li>
+        <li>Weighted options for deeper comfort</li>
+      </ul>
+      <a class="ghost-link" href="#">Shop faux fur</a>
+    </div>
+    <div class="feature-visual">
+      <i class="ph-thin ph-cloud"></i>
+      <span class="vis-label">Marshmallow blanket</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURE 2 ─────────────────────────────── -->
+<section class="lp-feature reverse">
+  <div class="container">
+    <div class="feature-text">
+      <div class="feature-eyebrow">
+        <span class="label">Robes</span>
+      </div>
+      <h3 class="feature-heading">Wrapped in a <em>Weekend</em></h3>
+      <p class="feature-body">Our robes are what happens when a blanket decides to follow you around the house. Oversized, impossibly soft, and designed for the hours between everything else.</p>
+      <ul class="feature-points">
+        <li>Oversized fit — one size fits all comfort</li>
+        <li>Deep pockets for essentials (and snacks)</li>
+        <li>Quick-dry lining for post-shower warmth</li>
+      </ul>
+      <a class="ghost-link" href="#">Shop robes</a>
+    </div>
+    <div class="feature-visual">
+      <i class="ph-thin ph-coat-hanger"></i>
+      <span class="vis-label">Shleepy robe</span>
+    </div>
+  </div>
+</section>
+
+<hr class="lp-divider container">
+
+<!-- ── FEATURE 3 ─────────────────────────────── -->
+<section class="lp-feature">
+  <div class="container">
+    <div class="feature-text">
+      <div class="feature-eyebrow">
+        <span class="label">Gift Sets</span>
+      </div>
+      <h3 class="feature-heading">Give the Gift of <em>Staying In</em></h3>
+      <p class="feature-body">A curated set of our coziest pieces, wrapped and ready. For the person who already has everything — except a reason to leave the couch.</p>
+      <ul class="feature-points">
+        <li>Blanket + robe + accessories bundles</li>
+        <li>Signature gift packaging included</li>
+        <li>Personal note option at checkout</li>
+      </ul>
+      <a class="ghost-link" href="#">Browse gifts</a>
+    </div>
+    <div class="feature-visual">
+      <div class="mini-cards">
+        <div class="mini-card">
+          <div class="mini-card-img"></div>
+          <div class="mini-card-body">
+            <div class="mini-card-name">Lil' Marsh</div>
+            <div class="mini-card-price">$65</div>
+          </div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-img"></div>
+          <div class="mini-card-body">
+            <div class="mini-card-name">Cuddle Puddle</div>
+            <div class="mini-card-price">$199</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PULL QUOTE ────────────────────────────── -->
+<section class="lp-quote">
+  <div class="container-narrow">
+    <blockquote>"Your new favorite place is wherever this blanket is."</blockquote>
+    <p class="attribution">— Every UnHide customer, eventually</p>
+  </div>
+</section>
+
+<!-- ── STATS ─────────────────────────────────── -->
+<section class="lp-stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div>
+        <div class="stat-value">500K+</div>
+        <div class="stat-label">Blankets Sold</div>
+      </div>
+      <div>
+        <div class="stat-value">100%</div>
+        <div class="stat-label">Vegan & Cruelty-Free</div>
+      </div>
+      <div>
+        <div class="stat-value">4.9</div>
+        <div class="stat-label">Average Rating</div>
+      </div>
+      <div>
+        <div class="stat-value">12</div>
+        <div class="stat-label">Signature Textures</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ────────────────────────────── -->
+<section class="lp-cta-block">
+  <div class="container">
+    <h2>Complete Your <em>Comfort</em> Zone</h2>
+    <p class="sub">Start with a blanket. End up rethinking your entire evening routine. Free shipping on orders over $75.</p>
+    <a class="btn btn-primary" href="#">Shop All Essentials</a>
+    <p class="note">Free returns within 30 days · No questions asked</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────── -->
+<footer class="lp-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">UnHide</div>
+        <p class="footer-tagline">Complete your comfort zone with the coziest essentials on earth.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Shop</div>
+        <a href="#">Blankets</a>
+        <a href="#">Robes</a>
+        <a href="#">Accessories</a>
+        <a href="#">Gift Sets</a>
+        <a href="#">Sale</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="#">Our Story</a>
+        <a href="#">Sustainability</a>
+        <a href="#">Press</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Help</div>
+        <a href="#">FAQ</a>
+        <a href="#">Shipping & Returns</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Size Guide</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 UnHide. All rights reserved.</span>
+      <div class="footer-socials">
+        <a href="#"><i class="ph-thin ph-instagram-logo"></i></a>
+        <a href="#"><i class="ph-thin ph-tiktok-logo"></i></a>
+        <a href="#"><i class="ph-thin ph-pinterest-logo"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── FLOATING MODE BAR ─────────────────────── -->
+<div class="floating-bar">
+  <button class="mode-btn active" data-theme-btn data-mode="light">Light</button>
+  <button class="mode-btn" data-theme-btn data-mode="dark">Dark</button>
+</div>
+
+<script>
+  document.querySelectorAll('[data-theme-btn]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.mode;
+      document.documentElement.setAttribute('data-theme', mode);
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
