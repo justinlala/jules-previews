@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unhide — Component Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2/src/thin/style.css">
+<style>
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+a { text-decoration: none; color: inherit; pointer-events: none; cursor: default; }
+
+/* ── TOKENS: LIGHT ── */
+:root, [data-theme="light"] {
+  --bg: #FAF7F0;
+  --surface1: #FFFFFF;
+  --surface2: #F4F0E7;
+  --surface3: #EBE1D0;
+  --border: #EBE1D0;
+  --border-visible: #DADACA;
+  --text1: #1E1E1E;
+  --text2: #5C5850;
+  --text3: #7A756A;
+  --text4: #AAA494;
+  --accent: #665C34;
+  --accent-subtle: #F7F3EB;
+  --accent-secondary: #B59C63;
+  --success: #11998E;
+  --warning: #D4A843;
+  --error: #B4463E;
+  --overlay-shadow: 0 8px 32px rgba(30,30,30,0.12);
+  --hover-shadow: 0 2px 8px rgba(30,30,30,0.06);
+  --backdrop: rgba(30,30,30,0.5);
+}
+
+/* ── TOKENS: DARK ── */
+[data-theme="dark"] {
+  --bg: #121110;
+  --surface1: #1E1E1E;
+  --surface2: #2E2B27;
+  --surface3: #45413B;
+  --border: #2E2B27;
+  --border-visible: #45413B;
+  --text1: #FAF7F0;
+  --text2: #AAA494;
+  --text3: #7A756A;
+  --text4: #5C5850;
+  --accent: #B59C63;
+  --accent-subtle: #1C1A10;
+  --accent-secondary: #C6AD78;
+  --overlay-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  --hover-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  --backdrop: rgba(0,0,0,0.6);
+}
+
+/* ── GLOBAL ── */
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--text1);
+  background: var(--bg);
+  display: flex;
+  min-height: 100vh;
+  transition: background 200ms cubic-bezier(.36,.07,.19,.97), color 200ms cubic-bezier(.36,.07,.19,.97);
+}
+
+/* ── SIDEBAR / TOC ── */
+.toc {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 240px;
+  min-width: 240px;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--surface1);
+  border-right: 1px solid var(--border);
+  padding: 32px 0 96px;
+  z-index: 100;
+  transition: background 200ms, border-color 200ms;
+}
+.toc-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  padding: 0 24px 24px;
+  color: var(--text1);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.toc-brand span { font-weight: 400; font-size: 13px; font-family: 'Nunito Sans', sans-serif; color: var(--text3); display: block; margin-top: 2px; letter-spacing: 0.02em; }
+.toc a {
+  display: block;
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text3);
+  transition: color 200ms, background 200ms;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.toc a:hover { color: var(--text1); background: var(--accent-subtle); }
+.toc a.active { color: var(--accent); font-weight: 600; background: var(--accent-subtle); border-right: 2px solid var(--accent); }
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 48px 160px;
+}
+.main > h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+.main > .subtitle {
+  font-size: 16px;
+  color: var(--text3);
+  margin-bottom: 48px;
+  max-width: 600px;
+}
+
+/* ── SECTIONS ── */
+section {
+  margin-bottom: 64px;
+}
+section > h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+section > .desc {
+  font-size: 14px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+.canvas {
+  background: var(--surface1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 32px;
+  margin-bottom: 16px;
+  transition: background 200ms, border-color 200ms;
+}
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.spec-table th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.spec-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+  vertical-align: top;
+}
+.spec-table td:first-child { color: var(--text1); font-weight: 500; }
+.spec-table code {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  background: var(--accent-subtle);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ── SWATCHES ── */
+.swatch-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.swatch {
+  width: 72px;
+  text-align: center;
+}
+.swatch-box {
+  width: 72px;
+  height: 56px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+.swatch-label { font-size: 11px; font-weight: 500; color: var(--text2); letter-spacing: 0.02em; }
+.swatch-hex { font-size: 10px; color: var(--text4); font-family: 'DM Mono', monospace; }
+
+.semantic-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+.semantic-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--surface1);
+  font-size: 12px;
+  color: var(--text2);
+}
+.semantic-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* ── TYPOGRAPHY ── */
+.type-row {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.type-row:last-child { border-bottom: none; }
+.type-sample { flex: 1; min-width: 0; }
+.type-meta { width: 240px; flex-shrink: 0; font-size: 12px; color: var(--text3); line-height: 1.6; }
+.type-meta strong { color: var(--text2); }
+
+/* ── RADII / SPACING ── */
+.radii-row, .spacing-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+}
+.radius-box {
+  width: 80px;
+  height: 80px;
+  background: var(--accent-subtle);
+  border: 1px solid var(--border-visible);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--text3);
+  font-weight: 500;
+}
+.spacing-block-wrap { text-align: center; }
+.spacing-block {
+  background: var(--accent);
+  border-radius: 4px;
+  width: 32px;
+  margin: 0 auto 4px;
+}
+.spacing-label { font-size: 11px; color: var(--text3); }
+.spacing-val { font-size: 10px; color: var(--text4); font-family: 'DM Mono', monospace; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  transition: all 200ms cubic-bezier(.36,.07,.19,.97);
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #FFFFFF;
+  padding: 15px 50px;
+  border-radius: 5px;
+  border: 1px solid var(--accent);
+}
+.btn-primary.is-hover { background: #57502E; }
+.btn-primary.is-active { transform: scale(0.98); }
+.btn-primary.is-focused { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn-primary.is-disabled { opacity: 0.4; pointer-events: none; }
+
+.btn-secondary {
+  background: var(--surface1);
+  color: var(--text1);
+  padding: 12px 24px;
+  border-radius: 5px;
+  border: 1px solid var(--text1);
+}
+.btn-secondary.is-hover { background: var(--surface2); }
+.btn-secondary.is-active { transform: scale(0.98); }
+.btn-secondary.is-focused { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn-secondary.is-disabled { opacity: 0.4; pointer-events: none; }
+
+.btn-dark {
+  background: var(--text1);
+  color: var(--surface1);
+  padding: 15px 50px;
+  border-radius: 5px;
+  border: 1px solid var(--text1);
+}
+.btn-dark.is-hover { background: var(--surface3); color: var(--text1); }
+.btn-dark.is-active { transform: scale(0.98); }
+.btn-dark.is-focused { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn-dark.is-disabled { opacity: 0.4; pointer-events: none; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text1);
+  padding: 8px 0;
+  border-radius: 0;
+  font-weight: 400;
+  border: none;
+  border-bottom: 1px solid transparent;
+}
+.btn-ghost.is-hover { border-bottom-color: var(--text1); }
+.btn-ghost.is-focused { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn-ghost.is-disabled { opacity: 0.4; pointer-events: none; }
+
+.state-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.state-col {
+  text-align: center;
+}
+.state-col .state-label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text4);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+/* ── INPUTS ── */
+.input-wrap { margin-bottom: 16px; max-width: 320px; }
+.input-underline {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--text1);
+  padding: 8px 0;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 16px;
+  color: var(--text1);
+  outline: none;
+  transition: border-color 200ms;
+}
+.input-underline::placeholder { color: var(--text4); }
+.input-underline.is-focused { border-bottom-color: var(--accent); }
+.input-underline.is-error { border-bottom-color: var(--error); }
+.input-underline.is-disabled { opacity: 0.4; pointer-events: none; }
+
+.input-bordered {
+  width: 100%;
+  background: var(--surface1);
+  border: 1px solid var(--border-visible);
+  border-radius: 5px;
+  padding: 12px 16px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 16px;
+  color: var(--text1);
+  outline: none;
+  transition: border-color 200ms;
+}
+.input-bordered::placeholder { color: var(--text4); }
+.input-bordered.is-focused { border-color: var(--accent); }
+.input-bordered.is-error { border-color: var(--error); }
+.input-bordered.is-disabled { opacity: 0.4; pointer-events: none; }
+
+.input-select {
+  width: 100%;
+  background: var(--surface2);
+  border: none;
+  border-radius: 4px;
+  height: 34px;
+  padding: 0 12px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text1);
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%237A756A' viewBox='0 0 256 256'%3E%3Cpath d='M128,188a4,4,0,0,1-2.83-1.17l-80-80a4,4,0,0,1,5.66-5.66L128,178.34l77.17-77.17a4,4,0,1,1,5.66,5.66l-80,80A4,4,0,0,1,128,188Z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  transition: border-color 200ms;
+}
+.input-select.is-focused { box-shadow: 0 0 0 1px var(--accent); }
+.input-select.is-disabled { opacity: 0.4; pointer-events: none; }
+
+.input-helper { font-size: 12px; margin-top: 4px; color: var(--text3); }
+.input-helper.error { color: var(--error); }
+
+.inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.inputs-grid .state-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text4);
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* ── CARDS ── */
+.card-product {
+  background: var(--surface1);
+  border-radius: 4px;
+  padding: 8px 8px 15px;
+  width: 260px;
+  transition: box-shadow 200ms;
+}
+.card-product:hover { box-shadow: var(--hover-shadow); }
+.card-product-img {
+  width: 100%;
+  height: 200px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, var(--surface2), var(--surface3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text4);
+  font-size: 12px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.card-product-img .badge-promo {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+.card-product .stars { margin-bottom: 4px; }
+.card-product-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+.card-product-desc {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+.card-product-price { font-size: 16px; margin-bottom: 2px; }
+.card-product-price .original { text-decoration: line-through; color: var(--text3); }
+.card-product-price .sale { color: var(--error); }
+.card-product-colors { font-size: 12px; color: var(--text3); margin-bottom: 12px; }
+.card-product .btn-dark {
+  width: 100%;
+  font-size: 14px;
+  padding: 10px 16px;
+}
+
+.card-feature {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 24px;
+  width: 300px;
+}
+.card-feature h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.card-feature p { font-size: 14px; color: var(--text2); line-height: 1.4; }
+
+/* ── BADGES ── */
+.badge-promo {
+  display: inline-block;
+  background: #E2E05D;
+  color: #000000;
+  border-radius: 40px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+}
+.badge-status {
+  display: inline-block;
+  background: var(--success);
+  color: #FFFFFF;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.3;
+}
+.badge-tag {
+  display: inline-block;
+  background: var(--accent-subtle);
+  color: var(--accent);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* ── SELECTORS ── */
+.size-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid var(--border-visible);
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Nunito Sans', sans-serif;
+  color: var(--text1);
+  background: var(--surface1);
+  cursor: pointer;
+  transition: border-color 200ms;
+}
+.size-btn.is-selected { border-color: var(--text1); }
+.size-btn.is-disabled { opacity: 0.4; pointer-events: none; text-decoration: line-through; }
+
+.color-swatch-circle {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-visible);
+  cursor: pointer;
+  transition: outline 200ms;
+}
+.color-swatch-circle.is-selected {
+  outline: 2px solid var(--text1);
+  outline-offset: 2px;
+}
+
+/* ── STARS ── */
+.stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+}
+.star {
+  font-size: 14px;
+  color: var(--accent-secondary);
+}
+.star.empty { color: var(--border-visible); }
+.star-count {
+  font-size: 12px;
+  color: var(--text3);
+  margin-left: 4px;
+}
+
+/* ── PROGRESS ── */
+.progress-bar-track {
+  width: 240px;
+  height: 8px;
+  background: var(--surface3);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+}
+.progress-ring {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.progress-ring svg { transform: rotate(-90deg); }
+.progress-ring circle {
+  fill: none;
+  stroke-linecap: round;
+}
+.progress-ring .track { stroke: var(--surface3); }
+.progress-ring .fill { stroke: var(--accent); transition: stroke-dashoffset 500ms cubic-bezier(.36,.07,.19,.97); }
+.progress-ring .label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text1);
+}
+
+/* ── NAVIGATION ── */
+.nav-announcement {
+  background: var(--accent);
+  color: #FFFFFF;
+  text-align: center;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+.nav-header {
+  background: var(--bg);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text1);
+}
+.nav-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+.nav-links li a {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text1);
+  pointer-events: none;
+}
+.nav-links li a.italic { font-style: italic; }
+.nav-icons {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  font-size: 22px;
+  color: var(--text1);
+}
+
+.nav-footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 64px 24px 10px;
+}
+.footer-cols {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin-bottom: 48px;
+}
+.footer-col h4 {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-bottom: 12px;
+}
+.footer-col a {
+  display: block;
+  font-size: 14px;
+  color: var(--text1);
+  margin-bottom: 8px;
+  pointer-events: none;
+}
+.footer-wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 96px;
+  font-weight: 400;
+  color: var(--text4);
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 16px;
+  letter-spacing: -0.03em;
+}
+.footer-legal {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text4);
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── OVERLAYS ── */
+.overlay-demo {
+  position: relative;
+  min-height: 320px;
+  background: var(--surface2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-preview {
+  background: var(--surface1);
+  border-radius: 10px;
+  box-shadow: var(--overlay-shadow);
+  padding: 32px;
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text3);
+  cursor: pointer;
+}
+.modal-preview h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.modal-preview p { font-size: 14px; color: var(--text2); line-height: 1.4; margin-bottom: 24px; }
+
+.dropdown-preview {
+  background: var(--surface1);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  box-shadow: var(--overlay-shadow);
+  padding: 8px 0;
+  width: 200px;
+}
+.dropdown-item {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: var(--text1);
+  cursor: pointer;
+  transition: background 200ms;
+}
+.dropdown-item.is-hover { background: var(--surface2); }
+
+/* ── ICON GRID ── */
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 16px;
+}
+.icon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 8px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--surface1);
+  transition: box-shadow 200ms;
+}
+.icon-item i { font-size: 28px; color: var(--text1); }
+.icon-item span { font-size: 10px; color: var(--text3); text-align: center; word-break: break-all; }
+
+/* ── THEME TOGGLE ── */
+.theme-toggle-bar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  background: var(--surface1);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px;
+  box-shadow: var(--overlay-shadow);
+  z-index: 9999;
+}
+.theme-toggle-bar button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 999px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 200ms;
+  background: transparent;
+  color: var(--text3);
+}
+.theme-toggle-bar button.active {
+  background: var(--accent);
+  color: #FFFFFF;
+}
+.theme-toggle-bar button i { font-size: 16px; }
+
+/* ── UTILITY ── */
+.flex-gap-8 { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.flex-gap-12 { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.flex-gap-16 { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+.flex-gap-24 { display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mb-8 { margin-bottom: 8px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+.label-sm { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text4); margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ TOC SIDEBAR ═══════════ -->
+<nav class="toc">
+  <div class="toc-brand">Unhide <span>Component Library</span></div>
+  <a href="#colors" data-section="colors">Colors</a>
+  <a href="#typography" data-section="typography">Typography</a>
+  <a href="#radii" data-section="radii">Radii</a>
+  <a href="#spacing" data-section="spacing">Spacing</a>
+  <a href="#buttons" data-section="buttons">Buttons</a>
+  <a href="#inputs" data-section="inputs">Inputs</a>
+  <a href="#cards" data-section="cards">Cards</a>
+  <a href="#badges" data-section="badges">Badges &amp; Tags</a>
+  <a href="#selectors" data-section="selectors">Size &amp; Color Selectors</a>
+  <a href="#stars" data-section="stars">Star Rating</a>
+  <a href="#progress" data-section="progress">Progress</a>
+  <a href="#navigation" data-section="navigation">Navigation</a>
+  <a href="#overlays" data-section="overlays">Overlays</a>
+  <a href="#icons" data-section="icons">Icons</a>
+</nav>
+
+<!-- ═══════════ MAIN CONTENT ═══════════ -->
+<main class="main">
+  <h1>Unhide Component Library</h1>
+  <p class="subtitle">Design tokens and UI components for the Unhide luxury blanket brand. Warm tactile luxury -- premium restraint meets cozy approachability.</p>
+
+  <!-- ───────── 1. COLORS ───────── -->
+  <section id="colors">
+    <h2>Colors</h2>
+    <p class="desc">Warm cream-tinted neutrals paired with olive-gold brand accents. All semantic tokens reference the primitive scales below.</p>
+
+    <p class="label-sm">Neutral Ramp</p>
+    <div class="canvas">
+      <div class="swatch-grid">
+        <div class="swatch"><div class="swatch-box" style="background:#FAF7F0"></div><div class="swatch-label">50</div><div class="swatch-hex">#FAF7F0</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#F4F0E7"></div><div class="swatch-label">100</div><div class="swatch-hex">#F4F0E7</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#EBE1D0"></div><div class="swatch-label">200</div><div class="swatch-hex">#EBE1D0</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#DADACA"></div><div class="swatch-label">300</div><div class="swatch-hex">#DADACA</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#AAA494"></div><div class="swatch-label">400</div><div class="swatch-hex">#AAA494</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#7A756A"></div><div class="swatch-label">500</div><div class="swatch-hex">#7A756A</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#5C5850"></div><div class="swatch-label">600</div><div class="swatch-hex">#5C5850</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#45413B"></div><div class="swatch-label">700</div><div class="swatch-hex">#45413B</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#2E2B27"></div><div class="swatch-label">800</div><div class="swatch-hex">#2E2B27</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#1E1E1E"></div><div class="swatch-label">900</div><div class="swatch-hex">#1E1E1E</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#121110"></div><div class="swatch-label">950</div><div class="swatch-hex">#121110</div></div>
+      </div>
+    </div>
+
+    <p class="label-sm">Brand Ramp (Olive-Gold)</p>
+    <div class="canvas">
+      <div class="swatch-grid">
+        <div class="swatch"><div class="swatch-box" style="background:#F7F3EB"></div><div class="swatch-label">50</div><div class="swatch-hex">#F7F3EB</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#EDE5D3"></div><div class="swatch-label">100</div><div class="swatch-hex">#EDE5D3</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#DBC9A5"></div><div class="swatch-label">200</div><div class="swatch-hex">#DBC9A5</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#C6AD78"></div><div class="swatch-label">300</div><div class="swatch-hex">#C6AD78</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#B59C63"></div><div class="swatch-label">400</div><div class="swatch-hex">#B59C63</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#665C34"></div><div class="swatch-label">500</div><div class="swatch-hex">#665C34</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#57502E"></div><div class="swatch-label">600</div><div class="swatch-hex">#57502E</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#474226"></div><div class="swatch-label">700</div><div class="swatch-hex">#474226</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#38341E"></div><div class="swatch-label">800</div><div class="swatch-hex">#38341E</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#2A2717"></div><div class="swatch-label">900</div><div class="swatch-hex">#2A2717</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#1C1A10"></div><div class="swatch-label">950</div><div class="swatch-hex">#1C1A10</div></div>
+      </div>
+    </div>
+
+    <p class="label-sm">Semantic Colors</p>
+    <div class="canvas">
+      <div class="semantic-row">
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--bg)"></div>bg</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--surface1);border:1px solid var(--border)"></div>surface1</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--surface2)"></div>surface2</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--surface3)"></div>surface3</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--border)"></div>border</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--border-visible)"></div>border-visible</div>
+      </div>
+      <div class="semantic-row" style="margin-top:12px">
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--text1)"></div>text1</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--text2)"></div>text2</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--text3)"></div>text3</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--text4)"></div>text4</div>
+      </div>
+      <div class="semantic-row" style="margin-top:12px">
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--accent)"></div>accent</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--accent-subtle);border:1px solid var(--border)"></div>accent-subtle</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--accent-secondary)"></div>accent-secondary</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--success)"></div>success</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--warning)"></div>warning</div>
+        <div class="semantic-chip"><div class="semantic-dot" style="background:var(--error)"></div>error</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── 2. TYPOGRAPHY ───────── -->
+  <section id="typography">
+    <h2>Typography</h2>
+    <p class="desc">Cormorant Garamond for headlines (serif warmth), Nunito Sans for body (clean readability). Italic display headlines are the brand signature.</p>
+
+    <div class="canvas">
+      <div class="type-row">
+        <div class="type-sample" style="font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:400;line-height:1.0;letter-spacing:-0.03em;font-style:italic;color:var(--text1)">Display Italic</div>
+        <div class="type-meta"><strong>display</strong><br>Cormorant Garamond<br>60px / 1.0 / 400 italic<br>letter-spacing: -0.03em</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample" style="font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:400;line-height:1.1;letter-spacing:-0.03em;color:var(--text1)">Heading One</div>
+        <div class="type-meta"><strong>h1</strong><br>Cormorant Garamond<br>42px / 1.1 / 400<br>letter-spacing: -0.03em</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample" style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;line-height:1.15;letter-spacing:-0.02em;color:var(--text1)">Heading Two</div>
+        <div class="type-meta"><strong>h2</strong><br>Cormorant Garamond<br>32px / 1.15 / 400<br>letter-spacing: -0.02em</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample" style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;line-height:1.2;letter-spacing:-0.02em;color:var(--text1)">Heading Three</div>
+        <div class="type-meta"><strong>h3</strong><br>Cormorant Garamond<br>24px / 1.2 / 500<br>letter-spacing: -0.02em</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample" style="font-family:'Nunito Sans',sans-serif;font-size:16px;font-weight:400;line-height:1.5;letter-spacing:-0.01em;color:var(--text1)">Body text -- the quick brown fox jumps over the lazy dog. Wrap yourself in luxury with our ultra-soft marshmallow blankets.</div>
+        <div class="type-meta"><strong>body</strong><br>Nunito Sans<br>16px / 1.5 / 400<br>letter-spacing: -0.01em</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample" style="font-family:'Nunito Sans',sans-serif;font-size:14px;font-weight:400;line-height:1.4;letter-spacing:-0.005em;color:var(--text2)">Body small -- secondary descriptions, product details, and supporting copy for the Unhide collection.</div>
+        <div class="type-meta"><strong>body-sm</strong><br>Nunito Sans<br>14px / 1.4 / 400<br>letter-spacing: -0.005em</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample" style="font-family:'Nunito Sans',sans-serif;font-size:12px;font-weight:400;line-height:1.3;letter-spacing:0em;color:var(--text3)">Caption -- 2,349 Reviews / Available in 9 colors</div>
+        <div class="type-meta"><strong>caption</strong><br>Nunito Sans<br>12px / 1.3 / 400<br>letter-spacing: 0em</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample" style="font-family:'Nunito Sans',sans-serif;font-size:11px;font-weight:500;line-height:1.2;letter-spacing:0.02em;color:var(--text3);text-transform:uppercase">Label -- Size / Color / Quantity</div>
+        <div class="type-meta"><strong>label</strong><br>Nunito Sans<br>11px / 1.2 / 500<br>letter-spacing: 0.02em</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── 3. RADII ───────── -->
+  <section id="radii">
+    <h2>Radii</h2>
+    <p class="desc">Soft, minimal rounding. Elements get 4px, controls 5px, containers 10px, pills 40px.</p>
+
+    <div class="canvas">
+      <div class="radii-row">
+        <div style="text-align:center"><div class="radius-box" style="border-radius:0px">0</div><div class="swatch-label" style="margin-top:4px">0px</div><div class="swatch-hex">none</div></div>
+        <div style="text-align:center"><div class="radius-box" style="border-radius:4px">4</div><div class="swatch-label" style="margin-top:4px">4px</div><div class="swatch-hex">element</div></div>
+        <div style="text-align:center"><div class="radius-box" style="border-radius:5px">5</div><div class="swatch-label" style="margin-top:4px">5px</div><div class="swatch-hex">control</div></div>
+        <div style="text-align:center"><div class="radius-box" style="border-radius:10px">10</div><div class="swatch-label" style="margin-top:4px">10px</div><div class="swatch-hex">container</div></div>
+        <div style="text-align:center"><div class="radius-box" style="border-radius:40px">40</div><div class="swatch-label" style="margin-top:4px">40px</div><div class="swatch-hex">pill</div></div>
+        <div style="text-align:center"><div class="radius-box" style="border-radius:999px;width:80px;height:80px">999</div><div class="swatch-label" style="margin-top:4px">999px</div><div class="swatch-hex">full</div></div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td>element</td><td><code>4px</code></td><td>Cards, image corners, badges</td></tr>
+        <tr><td>control</td><td><code>5px</code></td><td>Buttons, inputs</td></tr>
+        <tr><td>component</td><td><code>5px</code></td><td>Feature cards, dropdowns</td></tr>
+        <tr><td>container</td><td><code>10px</code></td><td>Modals, canvas wrappers</td></tr>
+        <tr><td>pill</td><td><code>40px</code></td><td>Promotional badges, toggle</td></tr>
+        <tr><td>full</td><td><code>999px</code></td><td>Circles, dots</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ───────── 4. SPACING ───────── -->
+  <section id="spacing">
+    <h2>Spacing</h2>
+    <p class="desc">A compact spacing scale from 2px (micro) to 96px (section-level). Based on a loose 8px base grid.</p>
+
+    <div class="canvas">
+      <div class="spacing-row">
+        <div class="spacing-block-wrap"><div class="spacing-block" style="height:2px"></div><div class="spacing-label">2xs</div><div class="spacing-val">2px</div></div>
+        <div class="spacing-block-wrap"><div class="spacing-block" style="height:4px"></div><div class="spacing-label">xs</div><div class="spacing-val">4px</div></div>
+        <div class="spacing-block-wrap"><div class="spacing-block" style="height:8px"></div><div class="spacing-label">sm</div><div class="spacing-val">8px</div></div>
+        <div class="spacing-block-wrap"><div class="spacing-block" style="height:16px"></div><div class="spacing-label">md</div><div class="spacing-val">16px</div></div>
+        <div class="spacing-block-wrap"><div class="spacing-block" style="height:24px"></div><div class="spacing-label">lg</div><div class="spacing-val">24px</div></div>
+        <div class="spacing-block-wrap"><div class="spacing-block" style="height:32px"></div><div class="spacing-label">xl</div><div class="spacing-val">32px</div></div>
+        <div class="spacing-block-wrap"><div class="spacing-block" style="height:48px"></div><div class="spacing-label">2xl</div><div class="spacing-val">48px</div></div>
+        <div class="spacing-block-wrap"><div class="spacing-block" style="height:64px"></div><div class="spacing-label">3xl</div><div class="spacing-val">64px</div></div>
+        <div class="spacing-block-wrap"><div class="spacing-block" style="height:96px"></div><div class="spacing-label">4xl</div><div class="spacing-val">96px</div></div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td>2xs</td><td><code>2px</code></td><td>Icon gaps, micro adjustments</td></tr>
+        <tr><td>xs</td><td><code>4px</code></td><td>Tight padding, tag gaps</td></tr>
+        <tr><td>sm</td><td><code>8px</code></td><td>Card internal padding, button icon gap</td></tr>
+        <tr><td>md</td><td><code>16px</code></td><td>Standard padding, form spacing</td></tr>
+        <tr><td>lg</td><td><code>24px</code></td><td>Card padding, section gap</td></tr>
+        <tr><td>xl</td><td><code>32px</code></td><td>Modal padding, large gaps</td></tr>
+        <tr><td>2xl</td><td><code>48px</code></td><td>Section spacing</td></tr>
+        <tr><td>3xl</td><td><code>64px</code></td><td>Page-level spacing</td></tr>
+        <tr><td>4xl</td><td><code>96px</code></td><td>Footer top padding, hero spacing</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ───────── 5. BUTTONS ───────── -->
+  <section id="buttons">
+    <h2>Buttons</h2>
+    <p class="desc">Four variants covering the full interaction hierarchy. Primary (olive) for the single most important CTA, Dark for secondary prominence, Secondary for hero overlays, Ghost for inline text actions.</p>
+
+    <p class="label-sm">Primary</p>
+    <div class="canvas">
+      <div class="state-row">
+        <div class="state-col"><span class="state-label">Default</span><button class="btn btn-primary">Add to Cart</button></div>
+        <div class="state-col"><span class="state-label">Hover</span><button class="btn btn-primary is-hover">Add to Cart</button></div>
+        <div class="state-col"><span class="state-label">Active</span><button class="btn btn-primary is-active">Add to Cart</button></div>
+        <div class="state-col"><span class="state-label">Focused</span><button class="btn btn-primary is-focused">Add to Cart</button></div>
+        <div class="state-col"><span class="state-label">Disabled</span><button class="btn btn-primary is-disabled">Add to Cart</button></div>
+      </div>
+    </div>
+
+    <p class="label-sm">Secondary</p>
+    <div class="canvas">
+      <div class="state-row">
+        <div class="state-col"><span class="state-label">Default</span><button class="btn btn-secondary">Shop Now</button></div>
+        <div class="state-col"><span class="state-label">Hover</span><button class="btn btn-secondary is-hover">Shop Now</button></div>
+        <div class="state-col"><span class="state-label">Active</span><button class="btn btn-secondary is-active">Shop Now</button></div>
+        <div class="state-col"><span class="state-label">Focused</span><button class="btn btn-secondary is-focused">Shop Now</button></div>
+        <div class="state-col"><span class="state-label">Disabled</span><button class="btn btn-secondary is-disabled">Shop Now</button></div>
+      </div>
+    </div>
+
+    <p class="label-sm">Dark</p>
+    <div class="canvas">
+      <div class="state-row">
+        <div class="state-col"><span class="state-label">Default</span><button class="btn btn-dark">Quick Add</button></div>
+        <div class="state-col"><span class="state-label">Hover</span><button class="btn btn-dark is-hover">Quick Add</button></div>
+        <div class="state-col"><span class="state-label">Active</span><button class="btn btn-dark is-active">Quick Add</button></div>
+        <div class="state-col"><span class="state-label">Focused</span><button class="btn btn-dark is-focused">Quick Add</button></div>
+        <div class="state-col"><span class="state-label">Disabled</span><button class="btn btn-dark is-disabled">Quick Add</button></div>
+      </div>
+    </div>
+
+    <p class="label-sm">Ghost</p>
+    <div class="canvas">
+      <div class="state-row">
+        <div class="state-col"><span class="state-label">Default</span><button class="btn btn-ghost">Continue shopping</button></div>
+        <div class="state-col"><span class="state-label">Hover</span><button class="btn btn-ghost is-hover">Continue shopping</button></div>
+        <div class="state-col"><span class="state-label">Focused</span><button class="btn btn-ghost is-focused">Continue shopping</button></div>
+        <div class="state-col"><span class="state-label">Disabled</span><button class="btn btn-ghost is-disabled">Continue shopping</button></div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead><tr><th>Variant</th><th>Background</th><th>Color</th><th>Border</th><th>Radius</th><th>Padding</th></tr></thead>
+      <tbody>
+        <tr><td>Primary</td><td><code>--accent (#665C34)</code></td><td><code>#FFFFFF</code></td><td><code>1px solid --accent</code></td><td><code>5px</code></td><td><code>15px 50px</code></td></tr>
+        <tr><td>Secondary</td><td><code>--surface1 (#FFF)</code></td><td><code>--text1</code></td><td><code>1px solid --text1</code></td><td><code>5px</code></td><td><code>12px 24px</code></td></tr>
+        <tr><td>Dark</td><td><code>--text1 (#1E1E1E)</code></td><td><code>--surface1</code></td><td><code>1px solid --text1</code></td><td><code>5px</code></td><td><code>15px 50px</code></td></tr>
+        <tr><td>Ghost</td><td><code>transparent</code></td><td><code>--text1</code></td><td><code>none</code></td><td><code>0px</code></td><td><code>8px 0</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ───────── 6. INPUTS ───────── -->
+  <section id="inputs">
+    <h2>Inputs</h2>
+    <p class="desc">Three input styles: the email underline (observed from newsletter signup), bordered (derived for forms), and select dropdowns.</p>
+
+    <p class="label-sm">Email / Underline Input</p>
+    <div class="canvas">
+      <div class="inputs-grid">
+        <div><span class="state-label">Default</span><div class="input-wrap"><input type="text" class="input-underline" placeholder="Enter your email" readonly></div></div>
+        <div><span class="state-label">Focused</span><div class="input-wrap"><input type="text" class="input-underline is-focused" value="hello@unhide.com" readonly></div></div>
+        <div><span class="state-label">Error</span><div class="input-wrap"><input type="text" class="input-underline is-error" value="bad-email" readonly><div class="input-helper error">Please enter a valid email</div></div></div>
+        <div><span class="state-label">Disabled</span><div class="input-wrap"><input type="text" class="input-underline is-disabled" placeholder="Disabled" readonly></div></div>
+      </div>
+    </div>
+
+    <p class="label-sm">Bordered Input</p>
+    <div class="canvas">
+      <div class="inputs-grid">
+        <div><span class="state-label">Default</span><div class="input-wrap"><input type="text" class="input-bordered" placeholder="Full name" readonly></div></div>
+        <div><span class="state-label">Focused</span><div class="input-wrap"><input type="text" class="input-bordered is-focused" value="Jane Doe" readonly></div></div>
+        <div><span class="state-label">Error</span><div class="input-wrap"><input type="text" class="input-bordered is-error" value="" readonly><div class="input-helper error">This field is required</div></div></div>
+        <div><span class="state-label">Disabled</span><div class="input-wrap"><input type="text" class="input-bordered is-disabled" placeholder="Disabled" readonly></div></div>
+      </div>
+    </div>
+
+    <p class="label-sm">Select</p>
+    <div class="canvas">
+      <div class="inputs-grid">
+        <div><span class="state-label">Default</span><div class="input-wrap"><select class="input-select" disabled><option>Sort by: Featured</option></select></div></div>
+        <div><span class="state-label">Focused</span><div class="input-wrap"><select class="input-select is-focused" disabled><option>Sort by: Price</option></select></div></div>
+        <div><span class="state-label">Disabled</span><div class="input-wrap"><select class="input-select is-disabled" disabled><option>Disabled</option></select></div></div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead><tr><th>Variant</th><th>Background</th><th>Border</th><th>Radius</th><th>Padding</th><th>Focus</th></tr></thead>
+      <tbody>
+        <tr><td>Underline</td><td><code>transparent</code></td><td><code>bottom 1px solid --text1</code></td><td><code>0px</code></td><td><code>8px 0</code></td><td><code>border-color: --accent</code></td></tr>
+        <tr><td>Bordered</td><td><code>--surface1</code></td><td><code>1px solid --border-visible</code></td><td><code>5px</code></td><td><code>12px 16px</code></td><td><code>border-color: --accent</code></td></tr>
+        <tr><td>Select</td><td><code>--surface2</code></td><td><code>none</code></td><td><code>4px</code></td><td><code>0 12px (h:34px)</code></td><td><code>box-shadow ring</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ───────── 7. CARDS ───────── -->
+  <section id="cards">
+    <h2>Cards</h2>
+    <p class="desc">Flat elevation strategy. Product cards use white backgrounds with 4px radii; hover adds subtle shadow. Feature cards use surface2 with a visible border.</p>
+
+    <div class="canvas">
+      <div class="flex-gap-24">
+        <!-- Product Card -->
+        <div class="card-product">
+          <div class="card-product-img">
+            <span>Product Image</span>
+            <span class="badge-promo">Our bestseller</span>
+          </div>
+          <div class="stars mb-8">
+            <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+            <span class="star-count">2,349 Reviews</span>
+          </div>
+          <div class="card-product-title">Marshmallow Blanket</div>
+          <div class="card-product-desc">A lil' blanket with big comfort energy</div>
+          <div class="card-product-price">
+            <span class="original">From $49</span>&nbsp;
+            <span class="sale">On Sale $36.75</span>
+          </div>
+          <div class="card-product-colors">Available in 9 colors</div>
+          <button class="btn btn-dark">Quick Add</button>
+        </div>
+
+        <!-- Feature Card -->
+        <div class="card-feature">
+          <h3>Ultra-Soft Fabric</h3>
+          <p>Our proprietary marshmallow weave is designed to feel like a warm hug. Machine washable, impossibly soft, and built to last.</p>
+        </div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead><tr><th>Property</th><th>Product Card</th><th>Feature Card</th></tr></thead>
+      <tbody>
+        <tr><td>Background</td><td><code>--surface1 (white)</code></td><td><code>--surface2</code></td></tr>
+        <tr><td>Border</td><td><code>none</code></td><td><code>1px solid --border</code></td></tr>
+        <tr><td>Radius</td><td><code>4px</code></td><td><code>5px</code></td></tr>
+        <tr><td>Padding</td><td><code>8px 8px 15px</code></td><td><code>24px</code></td></tr>
+        <tr><td>Shadow</td><td><code>none (hover: 0 2px 8px)</code></td><td><code>none</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ───────── 8. BADGES & TAGS ───────── -->
+  <section id="badges">
+    <h2>Badges &amp; Tags</h2>
+    <p class="desc">Three badge variants: promotional pill (yellow-green), status indicator (teal), and derived tag (accent-subtle background).</p>
+
+    <div class="canvas">
+      <div class="flex-gap-16">
+        <div style="text-align:center"><span class="state-label" style="display:block;margin-bottom:8px;font-size:11px;color:var(--text4);text-transform:uppercase;letter-spacing:0.04em;font-weight:500">Promotional</span><span class="badge-promo">Our bestseller</span></div>
+        <div style="text-align:center"><span class="state-label" style="display:block;margin-bottom:8px;font-size:11px;color:var(--text4);text-transform:uppercase;letter-spacing:0.04em;font-weight:500">Promotional</span><span class="badge-promo">Great gift</span></div>
+        <div style="text-align:center"><span class="state-label" style="display:block;margin-bottom:8px;font-size:11px;color:var(--text4);text-transform:uppercase;letter-spacing:0.04em;font-weight:500">Status</span><span class="badge-status">Best-seller</span></div>
+        <div style="text-align:center"><span class="state-label" style="display:block;margin-bottom:8px;font-size:11px;color:var(--text4);text-transform:uppercase;letter-spacing:0.04em;font-weight:500">Status</span><span class="badge-status" style="background:var(--warning)">Low stock</span></div>
+        <div style="text-align:center"><span class="state-label" style="display:block;margin-bottom:8px;font-size:11px;color:var(--text4);text-transform:uppercase;letter-spacing:0.04em;font-weight:500">Tag</span><span class="badge-tag">Blankets</span></div>
+        <div style="text-align:center"><span class="state-label" style="display:block;margin-bottom:8px;font-size:11px;color:var(--text4);text-transform:uppercase;letter-spacing:0.04em;font-weight:500">Tag</span><span class="badge-tag">Robes</span></div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead><tr><th>Variant</th><th>Background</th><th>Color</th><th>Radius</th><th>Padding</th><th>Font</th></tr></thead>
+      <tbody>
+        <tr><td>Promotional</td><td><code>#E2E05D</code></td><td><code>#000000</code></td><td><code>40px (pill)</code></td><td><code>6px 16px</code></td><td><code>14px / 400</code></td></tr>
+        <tr><td>Status</td><td><code>--success (#11998E)</code></td><td><code>#FFFFFF</code></td><td><code>4px</code></td><td><code>3px 8px</code></td><td><code>12px / 400</code></td></tr>
+        <tr><td>Tag</td><td><code>--accent-subtle</code></td><td><code>--accent</code></td><td><code>4px</code></td><td><code>4px 10px</code></td><td><code>12px / 500</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ───────── 9. SIZE & COLOR SELECTORS ───────── -->
+  <section id="selectors">
+    <h2>Size &amp; Color Selectors</h2>
+    <p class="desc">Inline selectors for product configuration. Size buttons toggle with border emphasis; color swatches use outline offset for selection.</p>
+
+    <p class="label-sm">Size Selector</p>
+    <div class="canvas">
+      <div class="flex-gap-8">
+        <span class="size-btn">XS</span>
+        <span class="size-btn is-selected">S</span>
+        <span class="size-btn">M</span>
+        <span class="size-btn">L</span>
+        <span class="size-btn">XL</span>
+        <span class="size-btn is-disabled">XXL</span>
+      </div>
+    </div>
+
+    <p class="label-sm">Color Swatches</p>
+    <div class="canvas">
+      <div class="flex-gap-8">
+        <span class="color-swatch-circle is-selected" style="background:#C6B59C"></span>
+        <span class="color-swatch-circle" style="background:#1E1E1E"></span>
+        <span class="color-swatch-circle" style="background:#FAF7F0"></span>
+        <span class="color-swatch-circle" style="background:#665C34"></span>
+        <span class="color-swatch-circle" style="background:#B4463E"></span>
+        <span class="color-swatch-circle" style="background:#11998E"></span>
+        <span class="color-swatch-circle" style="background:#D4A843"></span>
+        <span class="color-swatch-circle" style="background:#7A756A"></span>
+        <span class="color-swatch-circle" style="background:#EBE1D0"></span>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead><tr><th>Element</th><th>Size</th><th>Border</th><th>Radius</th><th>Selected State</th></tr></thead>
+      <tbody>
+        <tr><td>Size button</td><td><code>padding: 8px 16px</code></td><td><code>1px solid --border-visible</code></td><td><code>4px</code></td><td><code>border-color: --text1</code></td></tr>
+        <tr><td>Color swatch</td><td><code>28px x 28px</code></td><td><code>1px solid --border-visible</code></td><td><code>50%</code></td><td><code>outline: 2px solid --text1, offset 2px</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ───────── 10. STAR RATING ───────── -->
+  <section id="stars">
+    <h2>Star Rating</h2>
+    <p class="desc">Gold-filled stars using the accent-secondary token. Empty stars use border-visible for subtle contrast.</p>
+
+    <div class="canvas">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div>
+          <div class="label-sm" style="margin-bottom:4px">5 stars</div>
+          <div class="stars">
+            <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+            <span class="star-count">2,349 Reviews</span>
+          </div>
+        </div>
+        <div>
+          <div class="label-sm" style="margin-bottom:4px">4 stars</div>
+          <div class="stars">
+            <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star empty">&#9733;</span>
+            <span class="star-count">184 Reviews</span>
+          </div>
+        </div>
+        <div>
+          <div class="label-sm" style="margin-bottom:4px">3 stars</div>
+          <div class="stars">
+            <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star empty">&#9733;</span><span class="star empty">&#9733;</span>
+            <span class="star-count">42 Reviews</span>
+          </div>
+        </div>
+        <div>
+          <div class="label-sm" style="margin-bottom:4px">0 stars</div>
+          <div class="stars">
+            <span class="star empty">&#9733;</span><span class="star empty">&#9733;</span><span class="star empty">&#9733;</span><span class="star empty">&#9733;</span><span class="star empty">&#9733;</span>
+            <span class="star-count">No reviews yet</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead><tr><th>Property</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Filled color</td><td><code>--accent-secondary (#B59C63)</code></td></tr>
+        <tr><td>Empty color</td><td><code>--border-visible (#DADACA)</code></td></tr>
+        <tr><td>Size</td><td><code>14px</code></td></tr>
+        <tr><td>Gap</td><td><code>1px</code></td></tr>
+        <tr><td>Review count</td><td><code>caption (12px), --text3</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ───────── 11. PROGRESS ───────── -->
+  <section id="progress">
+    <h2>Progress</h2>
+    <p class="desc">Horizontal bar and ring gauge with rounded endpoints. Uses accent fill against surface3 track.</p>
+
+    <div class="canvas">
+      <div class="flex-gap-24" style="align-items:center">
+        <div>
+          <div class="label-sm mb-8">Bar -- 72%</div>
+          <div class="progress-bar-track"><div class="progress-bar-fill" style="width:72%"></div></div>
+          <div style="margin-top:16px" class="label-sm mb-8">Bar -- 30%</div>
+          <div class="progress-bar-track"><div class="progress-bar-fill" style="width:30%"></div></div>
+          <div style="margin-top:16px" class="label-sm mb-8">Bar -- 100%</div>
+          <div class="progress-bar-track"><div class="progress-bar-fill" style="width:100%"></div></div>
+        </div>
+        <div style="display:flex;gap:24px;align-items:center">
+          <div class="progress-ring">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <circle class="track" cx="40" cy="40" r="34" stroke-width="6" />
+              <circle class="fill" cx="40" cy="40" r="34" stroke-width="6"
+                stroke-dasharray="213.6" stroke-dashoffset="59.8" />
+            </svg>
+            <span class="label">72%</span>
+          </div>
+          <div class="progress-ring">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <circle class="track" cx="40" cy="40" r="34" stroke-width="6" />
+              <circle class="fill" cx="40" cy="40" r="34" stroke-width="6"
+                stroke-dasharray="213.6" stroke-dashoffset="149.5" />
+            </svg>
+            <span class="label">30%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead><tr><th>Property</th><th>Bar</th><th>Ring</th></tr></thead>
+      <tbody>
+        <tr><td>Track</td><td><code>--surface3, 8px h, 999px radius</code></td><td><code>--surface3, 6px stroke</code></td></tr>
+        <tr><td>Fill</td><td><code>--accent, 999px radius</code></td><td><code>--accent, 6px stroke</code></td></tr>
+        <tr><td>Linecap</td><td><code>border-radius: 999px</code></td><td><code>stroke-linecap: round</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ───────── 12. NAVIGATION ───────── -->
+  <section id="navigation">
+    <h2>Navigation</h2>
+    <p class="desc">Announcement bar (olive), header with serif logo and nav links, footer with massive wordmark. All observed from the live site.</p>
+
+    <p class="label-sm">Announcement Bar</p>
+    <div class="canvas" style="padding:0;overflow:hidden;border-radius:10px">
+      <div class="nav-announcement">
+        Free shipping on orders $75+ &nbsp;|&nbsp; Mother's Day Sale: Up to 25% off
+      </div>
+    </div>
+
+    <p class="label-sm mt-24">Header</p>
+    <div class="canvas" style="padding:0;overflow:hidden;border-radius:10px">
+      <div class="nav-header">
+        <div class="nav-logo">unhide</div>
+        <ul class="nav-links">
+          <li><a href="#">Blankets</a></li>
+          <li><a href="#">Robes</a></li>
+          <li><a href="#">Pillows</a></li>
+          <li><a href="#" class="italic">Mother's Day Sale</a></li>
+        </ul>
+        <div class="nav-icons">
+          <i class="ph-thin ph-magnifying-glass"></i>
+          <i class="ph-thin ph-user"></i>
+          <i class="ph-thin ph-tote"></i>
+        </div>
+      </div>
+    </div>
+
+    <p class="label-sm mt-24">Footer</p>
+    <div class="canvas" style="padding:0;overflow:hidden;border-radius:10px">
+      <div class="nav-footer">
+        <div class="footer-cols">
+          <div class="footer-col">
+            <h4>Shop</h4>
+            <a href="#">Blankets</a>
+            <a href="#">Robes</a>
+            <a href="#">Pillows</a>
+            <a href="#">Bundles</a>
+          </div>
+          <div class="footer-col">
+            <h4>About</h4>
+            <a href="#">Our Story</a>
+            <a href="#">Sustainability</a>
+            <a href="#">Reviews</a>
+          </div>
+          <div class="footer-col">
+            <h4>Help</h4>
+            <a href="#">FAQ</a>
+            <a href="#">Shipping</a>
+            <a href="#">Returns</a>
+            <a href="#">Contact</a>
+          </div>
+          <div class="footer-col">
+            <h4>Follow Us</h4>
+            <a href="#">Instagram</a>
+            <a href="#">TikTok</a>
+            <a href="#">Pinterest</a>
+          </div>
+        </div>
+        <div class="footer-wordmark">unhide</div>
+        <div class="footer-legal">&copy; 2026 Unhide. All rights reserved.</div>
+      </div>
+    </div>
+
+    <table class="spec-table mt-16">
+      <thead><tr><th>Element</th><th>Background</th><th>Font</th><th>Key Specs</th></tr></thead>
+      <tbody>
+        <tr><td>Announcement</td><td><code>--accent (#665C34)</code></td><td><code>14px, #FFF</code></td><td><code>padding: 10px 16px, center</code></td></tr>
+        <tr><td>Header</td><td><code>--bg (#FAF7F0)</code></td><td><code>Cormorant 20px nav, 28px logo</code></td><td><code>padding: 16px 24px</code></td></tr>
+        <tr><td>Footer</td><td><code>--bg (#FAF7F0)</code></td><td><code>links 14px, wordmark 96px</code></td><td><code>border-top: 1px solid --border, padding: 96px 0 10px</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ───────── 13. OVERLAYS ───────── -->
+  <section id="overlays">
+    <h2>Overlays</h2>
+    <p class="desc">Modal dialogs and dropdown menus. Both use overlay shadow (0 8px 32px). Modals have 10px radius; dropdowns 5px.</p>
+
+    <p class="label-sm">Modal</p>
+    <div class="overlay-demo" style="margin-bottom:24px">
+      <div class="modal-preview">
+        <button class="modal-close"><i class="ph-thin ph-x"></i></button>
+        <h3>Join the Cozy Club</h3>
+        <p>Sign up for exclusive access to new drops, special offers, and 15% off your first order.</p>
+        <div class="input-wrap" style="max-width:100%;margin-bottom:16px">
+          <input type="text" class="input-underline" placeholder="Enter your email" readonly>
+        </div>
+        <button class="btn btn-primary" style="width:100%;font-size:16px;padding:12px 24px">Sign Up</button>
+      </div>
+    </div>
+
+    <p class="label-sm">Dropdown</p>
+    <div class="canvas">
+      <div class="dropdown-preview">
+        <div class="dropdown-item is-hover">Sort by: Featured</div>
+        <div class="dropdown-item">Price: Low to High</div>
+        <div class="dropdown-item">Price: High to Low</div>
+        <div class="dropdown-item">Best Selling</div>
+        <div class="dropdown-item">Newest</div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead><tr><th>Property</th><th>Modal</th><th>Dropdown</th></tr></thead>
+      <tbody>
+        <tr><td>Background</td><td><code>--surface1</code></td><td><code>--surface1</code></td></tr>
+        <tr><td>Border</td><td><code>none</code></td><td><code>1px solid --border</code></td></tr>
+        <tr><td>Radius</td><td><code>10px</code></td><td><code>5px</code></td></tr>
+        <tr><td>Shadow</td><td><code>0 8px 32px rgba(30,30,30,0.12)</code></td><td><code>0 8px 32px rgba(30,30,30,0.12)</code></td></tr>
+        <tr><td>Padding</td><td><code>32px</code></td><td><code>8px 0 (items: 10px 16px)</code></td></tr>
+        <tr><td>Backdrop</td><td><code>rgba(30,30,30,0.5)</code></td><td><code>n/a</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ───────── 14. ICONS ───────── -->
+  <section id="icons">
+    <h2>Icons</h2>
+    <p class="desc">Phosphor Thin -- delicate 1px stroke weight that complements the photography-first aesthetic. Functional wayfinding only.</p>
+
+    <div class="canvas">
+      <div class="icon-grid">
+        <div class="icon-item"><i class="ph-thin ph-magnifying-glass"></i><span>search</span></div>
+        <div class="icon-item"><i class="ph-thin ph-user"></i><span>account</span></div>
+        <div class="icon-item"><i class="ph-thin ph-tote"></i><span>cart</span></div>
+        <div class="icon-item"><i class="ph-thin ph-heart"></i><span>wishlist</span></div>
+        <div class="icon-item"><i class="ph-thin ph-x"></i><span>close</span></div>
+        <div class="icon-item"><i class="ph-thin ph-caret-down"></i><span>expand</span></div>
+        <div class="icon-item"><i class="ph-thin ph-caret-right"></i><span>next</span></div>
+        <div class="icon-item"><i class="ph-thin ph-caret-left"></i><span>prev</span></div>
+        <div class="icon-item"><i class="ph-thin ph-minus"></i><span>decrease</span></div>
+        <div class="icon-item"><i class="ph-thin ph-plus"></i><span>increase</span></div>
+        <div class="icon-item"><i class="ph-thin ph-check"></i><span>check</span></div>
+        <div class="icon-item"><i class="ph-thin ph-star"></i><span>star</span></div>
+        <div class="icon-item"><i class="ph-thin ph-truck"></i><span>shipping</span></div>
+        <div class="icon-item"><i class="ph-thin ph-arrow-counter-clockwise"></i><span>returns</span></div>
+        <div class="icon-item"><i class="ph-thin ph-shield-check"></i><span>guarantee</span></div>
+        <div class="icon-item"><i class="ph-thin ph-gift"></i><span>gift</span></div>
+        <div class="icon-item"><i class="ph-thin ph-envelope-simple"></i><span>email</span></div>
+        <div class="icon-item"><i class="ph-thin ph-instagram-logo"></i><span>instagram</span></div>
+        <div class="icon-item"><i class="ph-thin ph-tiktok-logo"></i><span>tiktok</span></div>
+        <div class="icon-item"><i class="ph-thin ph-pinterest-logo"></i><span>pinterest</span></div>
+        <div class="icon-item"><i class="ph-thin ph-funnel"></i><span>filter</span></div>
+        <div class="icon-item"><i class="ph-thin ph-squares-four"></i><span>grid</span></div>
+        <div class="icon-item"><i class="ph-thin ph-list"></i><span>list</span></div>
+        <div class="icon-item"><i class="ph-thin ph-share-network"></i><span>share</span></div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead><tr><th>Property</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Kit</td><td><code>Phosphor</code></td></tr>
+        <tr><td>Weight</td><td><code>thin</code></td></tr>
+        <tr><td>CDN</td><td><code>unpkg.com/@phosphor-icons/web@2/src/thin/style.css</code></td></tr>
+        <tr><td>Class pattern</td><td><code>ph-thin ph-{name}</code></td></tr>
+        <tr><td>Default size</td><td><code>inherit (set via font-size)</code></td></tr>
+        <tr><td>Header size</td><td><code>22px</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<!-- ═══════════ THEME TOGGLE BAR ═══════════ -->
+<div class="theme-toggle-bar">
+  <button class="active" data-theme-btn="light" onclick="setTheme('light')">
+    <i class="ph-thin ph-sun"></i> Light
+  </button>
+  <button data-theme-btn="dark" onclick="setTheme('dark')">
+    <i class="ph-thin ph-moon"></i> Dark
+  </button>
+</div>
+
+<script>
+// ── Theme toggle ──
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  document.querySelectorAll('.theme-toggle-bar button').forEach(function(btn) {
+    btn.classList.toggle('active', btn.getAttribute('data-theme-btn') === theme);
+  });
+}
+
+// ── IntersectionObserver for TOC active state ──
+(function() {
+  var sections = document.querySelectorAll('section[id]');
+  var tocLinks = document.querySelectorAll('.toc a[data-section]');
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(function(link) {
+          link.classList.toggle('active', link.getAttribute('data-section') === entry.target.id);
+        });
+      }
+    });
+  }, {
+    rootMargin: '-10% 0px -80% 0px',
+    threshold: 0
+  });
+
+  sections.forEach(function(section) {
+    observer.observe(section);
+  });
+})();
+
+// ── Disable all anchor clicks ──
+document.addEventListener('click', function(e) {
+  if (e.target.closest('a')) {
+    var href = e.target.closest('a').getAttribute('href');
+    if (href && href.startsWith('#')) {
+      // Allow TOC navigation
+      return;
+    }
+    e.preventDefault();
+  }
+});
+</script>
+
+</body>
+</html>

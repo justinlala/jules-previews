@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unhide — Bento Grid Dashboard Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Mono:wght@400&family=Nunito+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2/src/thin/style.css">
+  <style>
+    /* ── RESET ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ── TOKENS: LIGHT ── */
+    [data-theme="light"] {
+      --bg: #FAF7F0;
+      --surface1: #FFFFFF;
+      --surface2: #F4F0E7;
+      --surface3: #EBE1D0;
+      --border: #EBE1D0;
+      --border-visible: #DADACA;
+      --text1: #1E1E1E;
+      --text2: #5C5850;
+      --text3: #7A756A;
+      --text4: #AAA494;
+      --accent: #665C34;
+      --accent-subtle: #F7F3EB;
+      --accent-secondary: #B59C63;
+      --success: #11998E;
+      --warning: #D4A843;
+      --error: #B4463E;
+    }
+
+    /* ── TOKENS: DARK ── */
+    [data-theme="dark"] {
+      --bg: #121110;
+      --surface1: #1E1E1E;
+      --surface2: #2E2B27;
+      --surface3: #45413B;
+      --border: #2E2B27;
+      --border-visible: #45413B;
+      --text1: #FAF7F0;
+      --text2: #AAA494;
+      --text3: #7A756A;
+      --text4: #5C5850;
+      --accent: #B59C63;
+      --accent-subtle: #1C1A10;
+      --accent-secondary: #C6AD78;
+      --success: #11998E;
+      --warning: #D4A843;
+      --error: #B4463E;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    :root {
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-body: "Nunito Sans", "Avenir", sans-serif;
+      --font-mono: "DM Mono", monospace;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      color: var(--text1);
+      background: var(--bg);
+      min-height: 100vh;
+      padding: 32px;
+      transition: background 200ms cubic-bezier(.36,.07,.19,.97), color 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+
+    /* ── GRID ── */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding-bottom: 80px;
+    }
+
+    /* ── CARD BASE ── */
+    .card {
+      background: var(--surface1);
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: box-shadow 200ms cubic-bezier(.36,.07,.19,.97), background 200ms cubic-bezier(.36,.07,.19,.97), border-color 200ms cubic-bezier(.36,.07,.19,.97);
+      overflow: hidden;
+    }
+    .card:hover {
+      box-shadow: 0 2px 8px rgba(30, 30, 30, 0.06);
+    }
+
+    .card-label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--text4);
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--text1);
+      margin-bottom: 8px;
+    }
+
+    /* ── SPANS ── */
+    .col-span-2 { grid-column: span 2; }
+    .col-span-3 { grid-column: span 3; }
+    .col-span-4 { grid-column: span 4; }
+
+    /* ── LINKS ── */
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ══════════════════════════════════════════
+       1. HERO WELCOME WIDGET (2 cols)
+       ══════════════════════════════════════════ */
+    .hero-card {
+      grid-column: span 2;
+      grid-row: span 2;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 340px;
+    }
+    .hero-image {
+      flex: 1;
+      background: linear-gradient(135deg, #C6B59C 0%, #B59C63 40%, #665C34 100%);
+      border-radius: 4px 4px 0 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 32px;
+      position: relative;
+    }
+    .hero-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(30,30,30,0.35) 0%, transparent 60%);
+      border-radius: 4px 4px 0 0;
+    }
+    .hero-headline {
+      position: relative;
+      z-index: 1;
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: #FFFFFF;
+    }
+    .hero-body {
+      padding: 24px;
+    }
+    .hero-body p {
+      font-size: 14px;
+      line-height: 1.4;
+      letter-spacing: -0.005em;
+      color: var(--text2);
+      margin-bottom: 16px;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #FFFFFF;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px 32px;
+      border-radius: 5px;
+      border: 1px solid var(--accent);
+      cursor: pointer;
+      transition: background 100ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .btn-primary:hover { background: #57502E; text-decoration: none; }
+
+    /* ══════════════════════════════════════════
+       2. METRIC CARD
+       ══════════════════════════════════════════ */
+    .metric-card { min-height: 160px; display: flex; flex-direction: column; justify-content: space-between; }
+    .metric-number {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text1);
+    }
+    .metric-sub {
+      font-size: 14px;
+      color: var(--text3);
+      line-height: 1.4;
+      letter-spacing: -0.005em;
+    }
+    .metric-icon {
+      font-size: 24px;
+      color: var(--accent-secondary);
+    }
+
+    /* ══════════════════════════════════════════
+       3. BESTSELLERS LIST
+       ══════════════════════════════════════════ */
+    .bestseller-list { list-style: none; }
+    .bestseller-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .bestseller-item:last-child { border-bottom: none; }
+    .bestseller-info { display: flex; flex-direction: column; gap: 2px; }
+    .bestseller-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text1);
+      letter-spacing: -0.005em;
+    }
+    .bestseller-stars {
+      display: flex;
+      gap: 2px;
+      color: var(--accent-secondary);
+      font-size: 14px;
+    }
+    .bestseller-price {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text2);
+    }
+
+    /* ══════════════════════════════════════════
+       4. COLOR PALETTE SWATCHES
+       ══════════════════════════════════════════ */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .swatch-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .swatch-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid var(--border-visible);
+      transition: transform 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .swatch-circle:hover { transform: scale(1.1); }
+    .swatch-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--text4);
+      text-align: center;
+    }
+
+    /* ══════════════════════════════════════════
+       5. SEASONAL COLLECTION BADGES
+       ══════════════════════════════════════════ */
+    .badge-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      line-height: 1.4;
+    }
+    .badge--olive { background: var(--accent); color: #FFFFFF; }
+    .badge--gold { background: var(--accent-secondary); color: #FFFFFF; }
+    .badge--cream { background: var(--surface2); color: var(--text2); }
+    .badge--lime { background: #E2E05D; color: #000000; }
+    .badge--teal { background: var(--success); color: #FFFFFF; border-radius: 4px; padding: 3px 8px; font-size: 12px; }
+
+    /* ══════════════════════════════════════════
+       6. CUSTOMER SENTIMENT (RATING DISTRIBUTION)
+       ══════════════════════════════════════════ */
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .rating-row:last-child { margin-bottom: 0; }
+    .rating-label {
+      font-size: 12px;
+      color: var(--text3);
+      width: 32px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .rating-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: var(--surface2);
+      border-radius: 40px;
+      overflow: hidden;
+    }
+    .rating-bar-fill {
+      height: 100%;
+      background: var(--accent-secondary);
+      border-radius: 40px;
+      transition: width 500ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .rating-pct {
+      font-size: 12px;
+      color: var(--text4);
+      width: 32px;
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════════
+       7. MATERIALS & CARE
+       ══════════════════════════════════════════ */
+    .care-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+    .care-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      letter-spacing: -0.005em;
+      color: var(--text2);
+    }
+    .care-item i {
+      font-size: 20px;
+      color: var(--accent-secondary);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ══════════════════════════════════════════
+       8. TOKEN KEY WIDGET (3 cols)
+       ══════════════════════════════════════════ */
+    .token-key-card { grid-column: span 3; }
+    .token-sections {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 8px;
+    }
+    .token-section-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--text4);
+      margin-bottom: 12px;
+    }
+    .token-color-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .token-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 1px solid var(--border-visible);
+      flex-shrink: 0;
+    }
+    .token-color-name {
+      font-size: 12px;
+      color: var(--text2);
+    }
+    .token-color-hex {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text4);
+      margin-left: auto;
+    }
+    .type-sample-display {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--text1);
+      margin-bottom: 8px;
+    }
+    .type-sample-h2 {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--text1);
+      margin-bottom: 6px;
+    }
+    .type-sample-body {
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--text2);
+      margin-bottom: 6px;
+    }
+    .type-sample-mono {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text3);
+    }
+    .spacing-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .spacing-block {
+      height: 12px;
+      background: var(--accent-secondary);
+      border-radius: 2px;
+      opacity: 0.5;
+    }
+    .spacing-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text4);
+      flex-shrink: 0;
+      width: 28px;
+    }
+
+    /* ══════════════════════════════════════════
+       9. QUICK ACTIONS
+       ══════════════════════════════════════════ */
+    .quick-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    .quick-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 5px;
+      background: var(--surface2);
+      color: var(--text1);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      cursor: pointer;
+      transition: background 100ms cubic-bezier(.36,.07,.19,.97);
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-family: var(--font-body);
+    }
+    .quick-action-btn:hover { background: var(--surface3); text-decoration: none; }
+    .quick-action-btn i { font-size: 18px; color: var(--accent-secondary); }
+    .quick-action-btn .arrow { margin-left: auto; color: var(--text4); font-size: 14px; }
+
+    /* ══════════════════════════════════════════
+       10. TRENDING / RECENTLY VIEWED
+       ══════════════════════════════════════════ */
+    .trending-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .trending-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .trending-thumb {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 4px;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .trending-thumb i { font-size: 28px; color: var(--text4); }
+    .trending-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text1);
+      letter-spacing: -0.005em;
+    }
+    .trending-price {
+      font-size: 12px;
+      color: var(--text3);
+    }
+
+    /* ══════════════════════════════════════════
+       THEME TOGGLE
+       ══════════════════════════════════════════ */
+    .theme-toggle-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 4px;
+      padding: 4px;
+      background: var(--surface1);
+      border: 1px solid var(--border-visible);
+      border-radius: 40px;
+      box-shadow: 0 8px 32px rgba(30, 30, 30, 0.12);
+      z-index: 100;
+    }
+    .theme-toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 20px;
+      border: none;
+      border-radius: 40px;
+      background: transparent;
+      color: var(--text3);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .theme-toggle-btn.active {
+      background: var(--accent);
+      color: #FFFFFF;
+    }
+    .theme-toggle-btn i { font-size: 16px; }
+  </style>
+</head>
+<body>
+
+<div class="bento-grid">
+
+  <!-- 1. HERO WELCOME (2 cols, 2 rows) -->
+  <div class="card hero-card">
+    <div class="hero-image">
+      <div class="hero-headline">Wrap yourself<br>in warmth</div>
+    </div>
+    <div class="hero-body">
+      <p>Premium blankets and textiles designed for the moments that matter most. From couch to bed, every Unhide piece is a hug you can hold.</p>
+      <a href="#" class="btn-primary">Shop the Collection</a>
+    </div>
+  </div>
+
+  <!-- 2. METRIC: FIVE-STAR REVIEWS -->
+  <div class="card metric-card">
+    <div>
+      <div class="card-label">Customer Love</div>
+      <div class="metric-number">9,047</div>
+      <div class="metric-sub">five-star reviews</div>
+    </div>
+    <div class="metric-icon"><i class="ph-thin ph-star"></i></div>
+  </div>
+
+  <!-- 3. SEASONAL COLLECTION BADGES -->
+  <div class="card">
+    <div class="card-label">Collections</div>
+    <div class="badge-wrap">
+      <span class="badge badge--olive">Our Bestseller</span>
+      <span class="badge badge--gold">Great Gift</span>
+      <span class="badge badge--lime">New Arrival</span>
+      <span class="badge badge--cream">Kids' Favorites</span>
+      <span class="badge badge--teal">Eco Certified</span>
+      <span class="badge badge--cream">Travel Size</span>
+      <span class="badge badge--olive">Limited Edition</span>
+    </div>
+  </div>
+
+  <!-- 4. BESTSELLERS LIST (2 cols) -->
+  <div class="card col-span-2">
+    <div class="card-label">Bestsellers</div>
+    <ul class="bestseller-list">
+      <li class="bestseller-item">
+        <div class="bestseller-info">
+          <span class="bestseller-name">Marshmallow Blanket</span>
+          <span class="bestseller-stars"><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i></span>
+        </div>
+        <span class="bestseller-price">$129</span>
+      </li>
+      <li class="bestseller-item">
+        <div class="bestseller-info">
+          <span class="bestseller-name">Cuddle Puddle</span>
+          <span class="bestseller-stars"><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i></span>
+        </div>
+        <span class="bestseller-price">$189</span>
+      </li>
+      <li class="bestseller-item">
+        <div class="bestseller-info">
+          <span class="bestseller-name">Lil' Marsh</span>
+          <span class="bestseller-stars"><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-half"></i></span>
+        </div>
+        <span class="bestseller-price">$49</span>
+      </li>
+      <li class="bestseller-item">
+        <div class="bestseller-info">
+          <span class="bestseller-name">Alpaca Knit Throw</span>
+          <span class="bestseller-stars"><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i></span>
+        </div>
+        <span class="bestseller-price">$249</span>
+      </li>
+      <li class="bestseller-item">
+        <div class="bestseller-info">
+          <span class="bestseller-name">The Cozy Robe</span>
+          <span class="bestseller-stars"><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star-fill"></i><i class="ph-thin ph-star"></i></span>
+        </div>
+        <span class="bestseller-price">$98</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 5. COLOR PALETTE WIDGET -->
+  <div class="card col-span-2">
+    <div class="card-label">Available Colors</div>
+    <div class="swatch-grid">
+      <div class="swatch-item">
+        <div class="swatch-circle" style="background:#FAF7F0;"></div>
+        <span class="swatch-label">Cream</span>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-circle" style="background:#D4C4A8;"></div>
+        <span class="swatch-label">Oat</span>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-circle" style="background:#B59C63;"></div>
+        <span class="swatch-label">Camel</span>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-circle" style="background:#665C34;"></div>
+        <span class="swatch-label">Olive</span>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-circle" style="background:#8B6F5E;"></div>
+        <span class="swatch-label">Mocha</span>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-circle" style="background:#C4A5A0;"></div>
+        <span class="swatch-label">Rose</span>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-circle" style="background:#A8B4A0;"></div>
+        <span class="swatch-label">Sage</span>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-circle" style="background:#2E2B27;"></div>
+        <span class="swatch-label">Charcoal</span>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-circle" style="background:#1E1E1E;"></div>
+        <span class="swatch-label">Ink</span>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-circle" style="background:#FFFFFF; border-color: var(--border-visible);"></div>
+        <span class="swatch-label">Snow</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. CUSTOMER SENTIMENT -->
+  <div class="card">
+    <div class="card-label">Rating Distribution</div>
+    <div class="card-title" style="margin-bottom:16px;">4.8 avg</div>
+    <div class="rating-row">
+      <span class="rating-label">5 star</span>
+      <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:82%;"></div></div>
+      <span class="rating-pct">82%</span>
+    </div>
+    <div class="rating-row">
+      <span class="rating-label">4 star</span>
+      <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:12%;"></div></div>
+      <span class="rating-pct">12%</span>
+    </div>
+    <div class="rating-row">
+      <span class="rating-label">3 star</span>
+      <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:4%;"></div></div>
+      <span class="rating-pct">4%</span>
+    </div>
+    <div class="rating-row">
+      <span class="rating-label">2 star</span>
+      <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:1%;"></div></div>
+      <span class="rating-pct">1%</span>
+    </div>
+    <div class="rating-row">
+      <span class="rating-label">1 star</span>
+      <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:1%;"></div></div>
+      <span class="rating-pct">1%</span>
+    </div>
+  </div>
+
+  <!-- 7. MATERIALS & CARE -->
+  <div class="card">
+    <div class="card-label">Materials & Care</div>
+    <ul class="care-list">
+      <li class="care-item"><i class="ph-thin ph-leaf"></i><span>100% vegan faux fur, OEKO-TEX certified</span></li>
+      <li class="care-item"><i class="ph-thin ph-drop"></i><span>Machine wash cold, tumble dry low</span></li>
+      <li class="care-item"><i class="ph-thin ph-recycle"></i><span>Made from recycled PET bottles</span></li>
+      <li class="care-item"><i class="ph-thin ph-shield-check"></i><span>Hypoallergenic, pet-friendly</span></li>
+      <li class="care-item"><i class="ph-thin ph-package"></i><span>Ships in recycled packaging</span></li>
+    </ul>
+  </div>
+
+  <!-- 8. QUICK ACTIONS -->
+  <div class="card">
+    <div class="card-label">Quick Actions</div>
+    <div class="quick-actions">
+      <a href="#" class="quick-action-btn"><i class="ph-thin ph-storefront"></i> Shop All <span class="arrow"><i class="ph-thin ph-arrow-right"></i></span></a>
+      <a href="#" class="quick-action-btn"><i class="ph-thin ph-gift"></i> Gift Cards <span class="arrow"><i class="ph-thin ph-arrow-right"></i></span></a>
+      <a href="#" class="quick-action-btn"><i class="ph-thin ph-truck"></i> Free Shipping <span class="arrow"><i class="ph-thin ph-arrow-right"></i></span></a>
+      <a href="#" class="quick-action-btn"><i class="ph-thin ph-chat-circle"></i> Contact Us <span class="arrow"><i class="ph-thin ph-arrow-right"></i></span></a>
+    </div>
+  </div>
+
+  <!-- 9. TRENDING / RECENTLY VIEWED -->
+  <div class="card">
+    <div class="card-label">Trending Now</div>
+    <div class="trending-grid">
+      <div class="trending-item">
+        <div class="trending-thumb"><i class="ph-thin ph-couch"></i></div>
+        <span class="trending-name">Marshmallow Blanket</span>
+        <span class="trending-price">$129</span>
+      </div>
+      <div class="trending-item">
+        <div class="trending-thumb"><i class="ph-thin ph-baby"></i></div>
+        <span class="trending-name">Lil' Marsh</span>
+        <span class="trending-price">$49</span>
+      </div>
+      <div class="trending-item">
+        <div class="trending-thumb"><i class="ph-thin ph-hoodie"></i></div>
+        <span class="trending-name">The Cozy Robe</span>
+        <span class="trending-price">$98</span>
+      </div>
+      <div class="trending-item">
+        <div class="trending-thumb"><i class="ph-thin ph-flower-lotus"></i></div>
+        <span class="trending-name">Alpaca Knit</span>
+        <span class="trending-price">$249</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. TOKEN KEY WIDGET (3 cols) -->
+  <div class="card token-key-card">
+    <div class="card-label">Design Tokens</div>
+    <div class="token-sections">
+      <!-- Color tokens -->
+      <div>
+        <div class="token-section-title">Color Palette</div>
+        <div class="token-color-row">
+          <div class="token-swatch" style="background:#FAF7F0;"></div>
+          <span class="token-color-name">Background</span>
+          <span class="token-color-hex">#FAF7F0</span>
+        </div>
+        <div class="token-color-row">
+          <div class="token-swatch" style="background:#FFFFFF;"></div>
+          <span class="token-color-name">Surface</span>
+          <span class="token-color-hex">#FFFFFF</span>
+        </div>
+        <div class="token-color-row">
+          <div class="token-swatch" style="background:#665C34;"></div>
+          <span class="token-color-name">Accent</span>
+          <span class="token-color-hex">#665C34</span>
+        </div>
+        <div class="token-color-row">
+          <div class="token-swatch" style="background:#B59C63;"></div>
+          <span class="token-color-name">Secondary</span>
+          <span class="token-color-hex">#B59C63</span>
+        </div>
+        <div class="token-color-row">
+          <div class="token-swatch" style="background:#1E1E1E;"></div>
+          <span class="token-color-name">Text Primary</span>
+          <span class="token-color-hex">#1E1E1E</span>
+        </div>
+        <div class="token-color-row">
+          <div class="token-swatch" style="background:#11998E;"></div>
+          <span class="token-color-name">Success</span>
+          <span class="token-color-hex">#11998E</span>
+        </div>
+        <div class="token-color-row">
+          <div class="token-swatch" style="background:#D4A843;"></div>
+          <span class="token-color-name">Warning</span>
+          <span class="token-color-hex">#D4A843</span>
+        </div>
+        <div class="token-color-row">
+          <div class="token-swatch" style="background:#B4463E;"></div>
+          <span class="token-color-name">Error</span>
+          <span class="token-color-hex">#B4463E</span>
+        </div>
+      </div>
+      <!-- Type scale -->
+      <div>
+        <div class="token-section-title">Type Scale</div>
+        <div class="type-sample-display">Display Italic</div>
+        <div class="type-sample-h2">Heading Serif</div>
+        <div class="type-sample-body">Body text in Nunito Sans at 14px with comfortable line height for readability.</div>
+        <div class="type-sample-mono">mono: DM Mono 13px</div>
+      </div>
+      <!-- Spacing -->
+      <div>
+        <div class="token-section-title">Spacing Units</div>
+        <div class="spacing-row"><span class="spacing-label">4</span><div class="spacing-block" style="width:4px;"></div></div>
+        <div class="spacing-row"><span class="spacing-label">8</span><div class="spacing-block" style="width:8px;"></div></div>
+        <div class="spacing-row"><span class="spacing-label">12</span><div class="spacing-block" style="width:12px;"></div></div>
+        <div class="spacing-row"><span class="spacing-label">16</span><div class="spacing-block" style="width:16px;"></div></div>
+        <div class="spacing-row"><span class="spacing-label">24</span><div class="spacing-block" style="width:24px;"></div></div>
+        <div class="spacing-row"><span class="spacing-label">32</span><div class="spacing-block" style="width:32px;"></div></div>
+        <div class="spacing-row"><span class="spacing-label">48</span><div class="spacing-block" style="width:48px;"></div></div>
+        <div class="spacing-row"><span class="spacing-label">64</span><div class="spacing-block" style="width:64px;"></div></div>
+        <div class="spacing-row"><span class="spacing-label">96</span><div class="spacing-block" style="width:96px;"></div></div>
+        <div style="margin-top:16px;">
+          <div class="token-section-title">Radii</div>
+          <div style="display:flex;gap:12px;align-items:flex-end;">
+            <div style="width:40px;height:40px;background:var(--surface2);border-radius:4px;border:1px solid var(--border-visible);"></div>
+            <div style="width:40px;height:40px;background:var(--surface2);border-radius:10px;border:1px solid var(--border-visible);"></div>
+            <div style="width:40px;height:40px;background:var(--surface2);border-radius:40px;border:1px solid var(--border-visible);"></div>
+            <div style="width:40px;height:40px;background:var(--surface2);border-radius:999px;border:1px solid var(--border-visible);"></div>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:6px;">
+            <span style="width:40px;text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--text4);">4</span>
+            <span style="width:40px;text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--text4);">10</span>
+            <span style="width:40px;text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--text4);">40</span>
+            <span style="width:40px;text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--text4);">999</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- THEME TOGGLE -->
+<div class="theme-toggle-bar">
+  <button class="theme-toggle-btn active" data-theme-target="light">
+    <i class="ph-thin ph-sun"></i> Light
+  </button>
+  <button class="theme-toggle-btn" data-theme-target="dark">
+    <i class="ph-thin ph-moon"></i> Dark
+  </button>
+</div>
+
+<script>
+  // Disable all anchor clicks
+  document.addEventListener('click', function(e) {
+    const anchor = e.target.closest('a');
+    if (anchor) {
+      e.preventDefault();
+    }
+  });
+
+  // Theme toggle
+  document.querySelectorAll('.theme-toggle-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var theme = this.getAttribute('data-theme-target');
+      document.documentElement.setAttribute('data-theme', theme);
+      document.querySelectorAll('.theme-toggle-btn').forEach(function(b) {
+        b.classList.remove('active');
+      });
+      this.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

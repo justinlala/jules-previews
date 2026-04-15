@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UnHide — The World's Coziest Blankets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Nunito+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2/src/thin/style.css">
+  <style>
+    /* ── RESET ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    a { text-decoration: none; color: inherit; pointer-events: none; cursor: default; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    input { font-family: inherit; outline: none; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── THEME TOKENS ── */
+    :root,
+    [data-theme="light"] {
+      --bg: #FAF7F0;
+      --surface1: #FFFFFF;
+      --surface2: #F4F0E7;
+      --surface3: #EBE1D0;
+      --border: #EBE1D0;
+      --border-visible: #DADACA;
+      --text1: #1E1E1E;
+      --text2: #5C5850;
+      --text3: #7A756A;
+      --text4: #AAA494;
+      --accent: #665C34;
+      --accent-subtle: #F7F3EB;
+      --accent-secondary: #B59C63;
+      --success: #11998E;
+      --warning: #D4A843;
+      --error: #B4463E;
+    }
+
+    [data-theme="dark"] {
+      --bg: #121110;
+      --surface1: #1E1E1E;
+      --surface2: #2E2B27;
+      --surface3: #45413B;
+      --border: #2E2B27;
+      --border-visible: #45413B;
+      --text1: #FAF7F0;
+      --text2: #AAA494;
+      --text3: #7A756A;
+      --text4: #5C5850;
+      --accent: #B59C63;
+      --accent-subtle: #1C1A10;
+      --accent-secondary: #C6AD78;
+      --success: #11998E;
+      --warning: #D4A843;
+      --error: #B4463E;
+    }
+
+    /* ── BASE ── */
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      color: var(--text1);
+      background: var(--bg);
+      transition: background 200ms cubic-bezier(.36,.07,.19,.97), color 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    .display {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 42px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 32px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+    .body-sm {
+      font-size: 14px;
+      line-height: 1.4;
+      letter-spacing: -0.005em;
+    }
+    .caption {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: 0em;
+    }
+    .label {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #FFFFFF;
+      padding: 15px 50px;
+      border-radius: 5px;
+      font-weight: 500;
+      font-size: 18px;
+      font-family: 'Nunito Sans', sans-serif;
+      border: 1px solid var(--accent);
+      transition: background 200ms cubic-bezier(.36,.07,.19,.97);
+      pointer-events: none;
+    }
+    .btn-primary:hover {
+      background: #57502E;
+    }
+    .btn-secondary {
+      display: inline-block;
+      background: var(--surface1);
+      color: var(--text1);
+      padding: 12px 24px;
+      border-radius: 5px;
+      font-weight: 500;
+      font-size: 18px;
+      font-family: 'Nunito Sans', sans-serif;
+      border: 1px solid var(--text1);
+      transition: background 200ms cubic-bezier(.36,.07,.19,.97);
+      pointer-events: none;
+    }
+    .btn-secondary:hover {
+      background: var(--surface2);
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--bg);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: background 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--text1);
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text2);
+      letter-spacing: -0.005em;
+      transition: color 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .nav-links a:hover {
+      color: var(--text1);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .header-actions i {
+      font-size: 22px;
+      color: var(--text2);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #FAF7F0 0%, #EBE1D0 25%, #C6B59C 50%, #B59C63 75%, #665C34 100%);
+      z-index: 0;
+    }
+    [data-theme="dark"] .hero-bg {
+      background: linear-gradient(135deg, #1E1E1E 0%, #2E2B27 25%, #45413B 50%, #665C34 75%, #B59C63 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 96px 24px;
+      width: 100%;
+    }
+    .hero-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(40px, 7vw, 72px);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--text1);
+      max-width: 700px;
+      margin-bottom: 24px;
+    }
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text2);
+      max-width: 480px;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    /* ── FEATURES ── */
+    .section {
+      padding: 96px 0;
+    }
+    .section--tinted {
+      background: var(--surface2);
+      transition: background 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .feature-row {
+      display: flex;
+      align-items: center;
+      gap: 64px;
+    }
+    .feature-row--reverse {
+      flex-direction: row-reverse;
+    }
+    .feature-text {
+      flex: 1 1 50%;
+      min-width: 0;
+    }
+    .feature-visual {
+      flex: 1 1 50%;
+      min-width: 0;
+    }
+    .feature-label {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-secondary);
+      margin-bottom: 12px;
+    }
+    .feature-text h2 {
+      color: var(--text1);
+      margin-bottom: 16px;
+    }
+    .feature-text p {
+      color: var(--text2);
+      max-width: 460px;
+      margin-bottom: 24px;
+    }
+    .feature-text .btn-secondary {
+      margin-top: 8px;
+    }
+
+    /* ── VISUAL CARDS (suggestive compositions) ── */
+    .swatch-stack {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+    }
+    .swatch-card {
+      position: absolute;
+      border-radius: 4px;
+      transition: transform 500ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .swatch-card:hover {
+      transform: translateY(-4px);
+    }
+
+    /* Marshmallow swatch composition */
+    .swatch-card--1 {
+      width: 55%;
+      height: 65%;
+      background: linear-gradient(145deg, #FFFFFF, #F4F0E7);
+      border: 1px solid var(--border);
+      top: 10%;
+      left: 5%;
+      z-index: 1;
+    }
+    .swatch-card--2 {
+      width: 50%;
+      height: 55%;
+      background: linear-gradient(145deg, #EBE1D0, #DADACA);
+      border: 1px solid var(--border);
+      top: 20%;
+      right: 5%;
+      z-index: 2;
+    }
+    .swatch-card--3 {
+      width: 35%;
+      height: 40%;
+      background: linear-gradient(145deg, #B59C63, #C6AD78);
+      border-radius: 4px;
+      bottom: 5%;
+      left: 20%;
+      z-index: 3;
+    }
+    .swatch-card-label {
+      position: absolute;
+      bottom: 12px;
+      left: 16px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: var(--text3);
+    }
+
+    /* Sustainability composition */
+    .eco-stack {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+    }
+    .eco-card {
+      position: absolute;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 500ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .eco-card:hover {
+      transform: translateY(-4px);
+    }
+    .eco-card--main {
+      width: 70%;
+      height: 70%;
+      background: var(--accent-subtle);
+      border: 1px solid var(--border);
+      top: 5%;
+      left: 15%;
+      z-index: 1;
+    }
+    .eco-card--main .eco-type {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(28px, 4vw, 48px);
+      color: var(--accent-secondary);
+      letter-spacing: -0.03em;
+      text-align: center;
+      padding: 24px;
+      line-height: 1.1;
+    }
+    .eco-card--accent {
+      width: 40%;
+      height: 30%;
+      background: var(--accent);
+      bottom: 5%;
+      right: 5%;
+      z-index: 2;
+      border-radius: 4px;
+    }
+    .eco-card--accent span {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+    }
+
+    /* Gift composition */
+    .gift-stack {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+    }
+    .gift-card {
+      position: absolute;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: transform 500ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .gift-card:hover {
+      transform: translateY(-4px);
+    }
+    .gift-card--1 {
+      width: 45%;
+      height: 50%;
+      background: var(--surface1);
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+    .gift-card--2 {
+      width: 45%;
+      height: 50%;
+      background: var(--surface2);
+      top: 10%;
+      left: 30%;
+      z-index: 2;
+    }
+    .gift-card--3 {
+      width: 45%;
+      height: 50%;
+      background: var(--surface3);
+      bottom: 0;
+      right: 0;
+      z-index: 3;
+    }
+    .gift-card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 20px;
+      color: var(--text1);
+      margin-bottom: 4px;
+    }
+    .gift-card-desc {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 12px;
+      color: var(--text3);
+    }
+
+    /* ── PULL QUOTE ── */
+    .pullquote {
+      padding: 96px 0;
+      text-align: center;
+    }
+    .pullquote blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--text1);
+      max-width: 800px;
+      margin: 0 auto 24px;
+    }
+    .pullquote cite {
+      font-family: 'Nunito Sans', sans-serif;
+      font-style: normal;
+      font-size: 14px;
+      color: var(--text3);
+      display: block;
+    }
+    .pullquote .stars {
+      color: var(--accent-secondary);
+      font-size: 14px;
+      margin-bottom: 24px;
+      letter-spacing: 4px;
+    }
+
+    /* ── FINAL CTA ── */
+    .final-cta {
+      text-align: center;
+      padding: 96px 0;
+    }
+    .final-cta h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--text1);
+      margin-bottom: 32px;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 90px 0 10px;
+      transition: background 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 64px;
+    }
+    .footer-newsletter h3 {
+      margin-bottom: 8px;
+    }
+    .footer-newsletter p {
+      color: var(--text3);
+      font-size: 14px;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+    .newsletter-form {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      max-width: 360px;
+    }
+    .newsletter-input-wrap {
+      flex: 1;
+    }
+    .newsletter-input-wrap input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--text1);
+      padding: 8px 0;
+      font-size: 16px;
+      color: var(--text1);
+      border-radius: 0;
+    }
+    .newsletter-input-wrap input::placeholder {
+      color: var(--text4);
+    }
+    .newsletter-submit {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text1);
+      padding: 8px 0;
+      border-bottom: 1px solid transparent;
+      transition: border-color 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .newsletter-submit:hover {
+      border-bottom-color: var(--text1);
+    }
+    .footer-col h4 {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text4);
+      margin-bottom: 16px;
+    }
+    .footer-col ul li {
+      margin-bottom: 10px;
+    }
+    .footer-col ul li a {
+      font-size: 14px;
+      color: var(--text2);
+      transition: color 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .footer-col ul li a:hover {
+      color: var(--text1);
+    }
+    .footer-wordmark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(64px, 12vw, 140px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      color: var(--border);
+      text-align: center;
+      line-height: 1;
+      padding-bottom: 16px;
+      user-select: none;
+    }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      background: var(--surface1);
+      border: 1px solid var(--border-visible);
+      border-radius: 40px;
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 32px rgba(30, 30, 30, 0.12);
+      transition: background 200ms cubic-bezier(.36,.07,.19,.97), border-color 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .theme-toggle-bar span {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text3);
+      letter-spacing: 0.02em;
+    }
+    .toggle-btn {
+      width: 44px;
+      height: 24px;
+      border-radius: 999px;
+      background: var(--border-visible);
+      position: relative;
+      transition: background 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .toggle-btn::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--surface1);
+      top: 3px;
+      left: 3px;
+      transition: transform 200ms cubic-bezier(.36,.07,.19,.97);
+    }
+    .toggle-btn.active {
+      background: var(--accent);
+    }
+    .toggle-btn.active::after {
+      transform: translateX(20px);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .feature-row,
+      .feature-row--reverse {
+        flex-direction: column;
+        gap: 40px;
+      }
+      .feature-text, .feature-visual {
+        flex: 1 1 100%;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .hero-headline {
+        max-width: 100%;
+      }
+      .section {
+        padding: 64px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="#" class="logo">UnHide</a>
+      <nav class="nav-links">
+        <a href="#">Shop All</a>
+        <a href="#">Collections</a>
+        <a href="#">Reviews</a>
+        <a href="#">Our Mission</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#"><i class="ph-thin ph-magnifying-glass"></i></a>
+        <a href="#"><i class="ph-thin ph-user"></i></a>
+        <a href="#"><i class="ph-thin ph-tote"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="label" style="color: var(--text3); margin-bottom: 16px;">Faux Fur. Real Comfort.</p>
+      <h1 class="hero-headline">Wrap yourself in something extraordinary.</h1>
+      <p class="hero-sub">Vegan blankets so impossibly soft, you'll forget the rest of the world exists. Made to be touched, held, and never let go.</p>
+      <a href="#" class="btn-secondary">Shop the Collection</a>
+    </div>
+  </section>
+
+  <!-- ── FEATURE 1: MARSHMALLOW ── -->
+  <section class="section">
+    <div class="container">
+      <div class="feature-row">
+        <div class="feature-text">
+          <p class="feature-label">Best Seller</p>
+          <h2>The Marshmallow Blanket</h2>
+          <p>Close your eyes and imagine sinking your hands into the softest thing you have ever touched. That is the Marshmallow. Our signature faux fur blanket feels like a cloud decided to become furniture. Every fiber is engineered for warmth without weight, comfort without compromise. Once it is draped across your shoulders, the evening belongs to you.</p>
+          <a href="#" class="btn-secondary">Discover Marshmallow</a>
+        </div>
+        <div class="feature-visual">
+          <div class="swatch-stack">
+            <div class="swatch-card swatch-card--1">
+              <span class="swatch-card-label">Ivory Cloud</span>
+            </div>
+            <div class="swatch-card swatch-card--2">
+              <span class="swatch-card-label">Warm Sand</span>
+            </div>
+            <div class="swatch-card swatch-card--3">
+              <span class="swatch-card-label" style="color: #FFFFFF;">Golden Hour</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURE 2: SUSTAINABILITY ── -->
+  <section class="section section--tinted">
+    <div class="container">
+      <div class="feature-row feature-row--reverse">
+        <div class="feature-text">
+          <p class="feature-label">Our Promise</p>
+          <h2>Vegan fur that feels like the real thing.</h2>
+          <p>We believe you should never have to choose between luxury and conscience. Every UnHide blanket is 100% vegan and cruelty-free, crafted from recycled materials that tread lightly on the earth. The softness is indistinguishable from the finest natural furs. The difference? Nothing was harmed to make it. That is a kind of warmth that goes deeper than skin.</p>
+          <a href="#" class="btn-secondary">Our Materials</a>
+        </div>
+        <div class="feature-visual">
+          <div class="eco-stack">
+            <div class="eco-card eco-card--main">
+              <div class="eco-type">100% Vegan.<br>Zero Guilt.</div>
+            </div>
+            <div class="eco-card eco-card--accent">
+              <span>Recycled Fibers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURE 3: COLLECTIONS ── -->
+  <section class="section">
+    <div class="container">
+      <div class="feature-row">
+        <div class="feature-text">
+          <p class="feature-label">For Everyone You Love</p>
+          <h2>A blanket for every kind of cozy.</h2>
+          <p>The Lil' Marsh wraps your little ones in buttery softness. The Cuddle Puddle turns movie night into a family ritual. The Alpaca Knit brings texture and warmth to any room. Whether you are gifting someone special or finally treating yourself, there is an UnHide waiting with your name on it.</p>
+          <a href="#" class="btn-secondary">Shop Collections</a>
+        </div>
+        <div class="feature-visual">
+          <div class="gift-stack">
+            <div class="gift-card gift-card--1">
+              <span class="gift-card-name">Lil' Marsh</span>
+              <span class="gift-card-desc">For the little ones</span>
+            </div>
+            <div class="gift-card gift-card--2">
+              <span class="gift-card-name">Cuddle Puddle</span>
+              <span class="gift-card-desc">Family-sized comfort</span>
+            </div>
+            <div class="gift-card gift-card--3">
+              <span class="gift-card-name">Alpaca Knit</span>
+              <span class="gift-card-desc">Textured warmth</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PULL QUOTE ── -->
+  <section class="pullquote section--tinted">
+    <div class="container">
+      <div class="stars">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
+      <blockquote>"I bought one for myself, then three more for everyone I love. It is the kind of gift that makes people text you at midnight to say thank you."</blockquote>
+      <cite>-- Sarah M., Verified Buyer</cite>
+    </div>
+  </section>
+
+  <!-- ── FINAL CTA ── -->
+  <section class="final-cta">
+    <div class="container">
+      <h2>Find your favorite.</h2>
+      <a href="#" class="btn-primary">Shop All Blankets</a>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-newsletter">
+          <h3>Stay cozy.</h3>
+          <p>Sign up for early access, new drops, and the occasional love letter about softness.</p>
+          <form class="newsletter-form" onsubmit="event.preventDefault()">
+            <div class="newsletter-input-wrap">
+              <input type="email" placeholder="Your email" aria-label="Email address">
+            </div>
+            <button type="submit" class="newsletter-submit">Submit</button>
+          </form>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#">Marshmallow</a></li>
+            <li><a href="#">Lil' Marsh</a></li>
+            <li><a href="#">Cuddle Puddle</a></li>
+            <li><a href="#">Alpaca Knit</a></li>
+            <li><a href="#">Gift Cards</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Info</h4>
+          <ul>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Shipping</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-wordmark">UnHide</div>
+    </div>
+  </footer>
+
+  <!-- ── THEME TOGGLE ── -->
+  <div class="theme-toggle-bar">
+    <i class="ph-thin ph-sun" style="font-size: 18px; color: var(--text3);"></i>
+    <span>Light</span>
+    <button class="toggle-btn" id="themeToggle" aria-label="Toggle dark mode"></button>
+    <span>Dark</span>
+    <i class="ph-thin ph-moon" style="font-size: 18px; color: var(--text3);"></i>
+  </div>
+
+  <script>
+    const toggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    toggle.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      toggle.classList.toggle('active', next === 'dark');
+    });
+  </script>
+
+</body>
+</html>
